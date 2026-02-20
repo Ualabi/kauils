@@ -87,13 +87,15 @@ export type TicketStatus = 'open' | 'closed';
 // Ticket item (similar to order item but with staff tracking)
 export interface TicketItem {
   menuItemId: string;
-  menuItemName: string;
+  menuItemName?: string;
+  name: string;
+  price: number;
   quantity: number;
-  basePrice: number;
+  basePrice?: number;
   customizations?: Customization[];
-  itemTotal: number;
-  addedAt: Timestamp;
-  addedBy: string; // Staff UID
+  itemTotal?: number;
+  addedAt?: Timestamp;
+  addedBy?: string; // Staff UID
 }
 
 // Ticket interface (Staff table orders)

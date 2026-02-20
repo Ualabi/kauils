@@ -34,6 +34,10 @@ export async function createTicket(
       items: [],
       total: 0,
       createdAt: serverTimestamp() as Timestamp,
+      staffName: '',
+      subtotal: 0,
+      tax: 0,
+      updatedAt: serverTimestamp() as Timestamp,
     };
 
     await setDoc(ticketRef, newTicket);

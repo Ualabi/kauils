@@ -5,7 +5,7 @@ interface OrderConfirmationProps {
   pickupCode: string;
 }
 
-export default function OrderConfirmation({ orderId, pickupCode }: OrderConfirmationProps) {
+export default function OrderConfirmation({ pickupCode }: OrderConfirmationProps) {
   return (
     <div className="card text-center max-w-2xl mx-auto">
       <div className="mb-6">

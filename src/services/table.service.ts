@@ -7,6 +7,7 @@ import {
   updateDoc,
   query,
   onSnapshot,
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import type { Table, TableStatus } from '../types';
@@ -23,6 +24,7 @@ export async function initializeTables(count: number = 20): Promise<void> {
       const tableData: Omit<Table, 'tableNumber'> & { tableNumber: number } = {
         tableNumber: i,
         status: 'available',
+        lastUpdated: Timestamp.now(),
       };
       batch.push(setDoc(tableRef, tableData));
     }
