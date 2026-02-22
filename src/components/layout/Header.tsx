@@ -27,7 +27,7 @@ export default function Header() {
               <>
                 <span className="text-sm text-gray-600">
                   {user.displayName}
-                  {userRole && (
+                  {userRole != 'customer' && (
                     <span className="ml-2 text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
                       {userRole}
                     </span>
@@ -39,23 +39,23 @@ export default function Header() {
                       Menu
                     </Link>
                     <Link to="/cart" className="text-gray-700 hover:text-red-600">
-                      Cart
+                      Carro
                     </Link>
                     <Link to="/orders" className="text-gray-700 hover:text-red-600">
-                      My Orders
+                      Mis Pedidos
                     </Link>
                   </>
                 )}
                 {userRole === 'staff' && (
                   <Link to="/staff" className="text-gray-700 hover:text-red-600">
-                    Dashboard
+                    Panel
                   </Link>
                 )}
                 <button
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-700 font-medium"
                 >
-                  Logout
+                  Cerrar sesión
                 </button>
               </>
             ) : (

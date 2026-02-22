@@ -36,7 +36,8 @@ export default function LoginPage() {
       <div className="max-w-md w-full">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Sign In</h2>
+            <h2 className="text-3xl font-bold text-gray-900">¡Hola de nuevo!
+            </h2>
             <p className="mt-2 text-sm text-gray-600">
               Bienvenido a Kauil
             </p>
@@ -84,7 +85,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
           </form>
 
