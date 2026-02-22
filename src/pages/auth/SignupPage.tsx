@@ -25,7 +25,7 @@ export default function SignupPage() {
     try {
       await signup(email, password, displayName);
       navigate('/menu');
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Signup error:', err);
       setError(err instanceof Error ? err.message : 'Failed to create account. Please try again.');
     } finally {
@@ -53,7 +53,7 @@ export default function SignupPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
+                Nombre
               </label>
               <input
                 id="displayName"
@@ -62,7 +62,7 @@ export default function SignupPage() {
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 className="input-field"
-                placeholder="John Doe"
+                placeholder="Juan Pérez"
               />
             </div>
 
@@ -77,7 +77,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="input-field"
-                placeholder="you@example.com"
+                placeholder="correo@ejemplo.com"
               />
             </div>
 

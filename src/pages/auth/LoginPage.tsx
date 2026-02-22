@@ -38,7 +38,7 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Sign In</h2>
             <p className="mt-2 text-sm text-gray-600">
-              Welcome back to Kauils Burgers
+              Bienvenido a Kauil
             </p>
           </div>
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                Correo electrónico
               </label>
               <input
                 id="email"
@@ -66,7 +66,7 @@ export default function LoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Contraseña
               </label>
               <input
                 id="password"
@@ -90,9 +90,9 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              ¿No tienes cuenta?{' '}
               <Link to="/signup" className="text-red-600 hover:text-red-700 font-medium">
-                Sign up as a customer
+                Regístrate como cliente
               </Link>
             </p>
           </div>
