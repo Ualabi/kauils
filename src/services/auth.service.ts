@@ -18,6 +18,7 @@ import type { User, UserRole } from '../types';
  */
 export async function signup(
   email: string,
+  phone: string,
   password: string,
   displayName: string
 ): Promise<void> {
@@ -30,6 +31,7 @@ export async function signup(
     await setDoc(doc(db, 'users', uid), {
       uid,
       email,
+      phone,
       role: 'customer',
       displayName,
       createdAt: serverTimestamp(),

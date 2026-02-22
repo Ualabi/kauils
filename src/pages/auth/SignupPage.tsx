@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
@@ -17,13 +18,25 @@ export default function SignupPage() {
     setLoading(true);
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('La contraseña debe tener al menos 6 caracteres');
+      setLoading(false);
+      return;
+    }
+
+    if (!/^\d+$/.test(phone)) {
+      setError('El número de teléfono solo debe contener dígitos');
+      setLoading(false);
+      return;
+    }
+
+    if (phone.length < 10) {
+      setError('El número de teléfono debe tener al menos 10 dígitos');
       setLoading(false);
       return;
     }
 
     try {
-      await signup(email, password, displayName);
+      await signup(email, phone, password, displayName);
       navigate('/menu');
     } catch (err) {
       console.error('Signup error:', err);
@@ -53,7 +66,7 @@ export default function SignupPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
-                Nombre
+                Nombre de usuario
               </label>
               <input
                 id="displayName"
@@ -78,6 +91,21 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="input-field"
                 placeholder="correo@ejemplo.com"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                Número de teléfono (whatsapp)
+              </label>
+              <input
+                id="phone"
+                type="number"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="input-field"
+                placeholder="1234567890"
               />
             </div>
 
