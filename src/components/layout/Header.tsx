@@ -19,7 +19,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center">
-            <h1 className="text-2xl font-bold text-red-600">Kauils Burgers</h1>
+            <h1 className="text-2xl font-bold text-red-600">Hamburguesas Kauil</h1>
           </Link>
 
           <nav className="flex items-center gap-4">
@@ -61,13 +61,13 @@ export default function Header() {
             ) : (
               <>
                 <Link to="/login" className="text-gray-700 hover:text-red-600">
-                  Sign In
+                  Iniciar sesión
                 </Link>
-                <Link
+                <Link 
                   to="/signup"
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  Sign Up
+                  Registrarme
                 </Link>
               </>
             )}

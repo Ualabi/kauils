@@ -56,46 +56,13 @@ const menuItems = {
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-600 to-orange-500">
-      {/* Hero Section */}
+      {/* Main Section */}
       <div className="flex items-center justify-center p-4 pt-12">
         <div className="max-w-4xl w-full text-center">
-          <h1 className="text-6xl font-bold text-white mb-4">
-            Hamburguesas Kauil
-          </h1>
-          <p className="text-2xl text-white/90 mb-8">
+          <h1 className="text-5xl font-bold text-white mb-4">
             Las mejores hamburguesas a la leña
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-12">
-            <Link
-              to="/signup"
-              className="bg-white text-red-600 px-8 py-6 rounded-xl text-xl font-bold hover:bg-gray-100 transition-colors shadow-lg"
-            >
-              Ordena aquí
-              <p className="text-sm font-normal mt-2 text-gray-600">
-                New customers start here
-              </p>
-            </Link>
-
-            <Link
-              to="/login"
-              className="bg-red-800 text-white px-8 py-6 rounded-xl text-xl font-bold hover:bg-red-900 transition-colors shadow-lg"
-            >
-              Iniciar sesión
-              <p className="text-sm font-normal mt-2 text-red-200">
-                Clientes & Staff
-              </p>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Daily Specials Section */}
-      <div className="bg-white/10 backdrop-blur-sm py-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-white text-center mb-8">
-            Especiales del Día
-          </h2>
+          </h1>
+          
           <div className="grid md:grid-cols-2 gap-8">
             {/* Today's Bread */}
             <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
@@ -123,6 +90,9 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+          <h2 className="text-3xl font-bold text-white text-center mt-3 mb-5">
+            Especiales del Día
+          </h2>
         </div>
       </div>
 
