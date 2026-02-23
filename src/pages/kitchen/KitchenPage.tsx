@@ -152,7 +152,7 @@ function TicketCard({ ticket }: { ticket: Ticket }) {
           disabled={closing}
           className="text-sm bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 disabled:opacity-50"
         >
-          {closing ? 'Cerrando...' : 'Cerrar ticket'}
+          {closing ? 'Cerrando...' : isTogo ? 'Entregado ✓' : 'Cerrar ticket'}
         </button>
       </div>
     </div>
@@ -190,7 +190,7 @@ function OrderCard({ order }: { order: Order }) {
     }
   };
 
-  const handleOrderStatus = async (status: 'preparing' | 'ready') => {
+  const handleOrderStatus = async (status: 'preparing' | 'ready' | 'completed') => {
     setUpdatingStatus(true);
     try {
       await updateOrderStatus(order.id, status);
@@ -258,6 +258,15 @@ function OrderCard({ order }: { order: Order }) {
               className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 disabled:opacity-50"
             >
               Pedido listo ✓
+            </button>
+          )}
+          {order.status === 'ready' && (
+            <button
+              onClick={() => handleOrderStatus('completed')}
+              disabled={updatingStatus}
+              className="text-sm bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 disabled:opacity-50"
+            >
+              Entregado ✓
             </button>
           )}
         </div>
