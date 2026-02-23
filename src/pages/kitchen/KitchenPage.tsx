@@ -62,44 +62,62 @@ function TicketCard({ ticket }: { ticket: Ticket }) {
     }
   };
 
+  const isTogo = ticket.type === 'togo';
+
   const handleCloseTicket = async () => {
-    if (!confirm(`¿Cerrar ticket de Mesa ${ticket.tableNumber} y liberar la mesa?`)) return;
+    const label = isTogo ? ticket.customerName : `Mesa ${ticket.tableNumber}`;
+    if (!confirm(`¿Cerrar ticket de ${label}?`)) return;
     setClosing(true);
     try {
       await closeTicket(ticket.id);
-      await clearTable(ticket.tableNumber);
+      if (!isTogo && ticket.tableNumber !== undefined) {
+        await clearTable(ticket.tableNumber);
+      }
     } finally {
       setClosing(false);
     }
   };
 
   const handleTableAvailable = async () => {
-    await updateTableStatus(ticket.tableNumber, 'available');
+    if (ticket.tableNumber !== undefined) await updateTableStatus(ticket.tableNumber, 'available');
   };
 
   const handleTableOccupied = async () => {
-    await updateTableStatus(ticket.tableNumber, 'occupied');
+    if (ticket.tableNumber !== undefined) await updateTableStatus(ticket.tableNumber, 'occupied');
   };
 
   return (
     <div className="bg-white rounded-xl border-2 border-orange-200 p-4 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-bold text-gray-800">Mesa {ticket.tableNumber}</h3>
-        <div className="flex gap-2">
-          <button
-            onClick={handleTableAvailable}
-            className="text-xs px-2 py-1 rounded bg-green-100 text-green-700 border border-green-300 hover:bg-green-200"
-          >
-            Disponible
-          </button>
-          <button
-            onClick={handleTableOccupied}
-            className="text-xs px-2 py-1 rounded bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
-          >
-            Ocupada
-          </button>
+        <div>
+          {isTogo ? (
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-gray-800">{ticket.customerName}</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 font-medium">
+                🥡 Para llevar
+              </span>
+            </div>
+          ) : (
+            <h3 className="text-lg font-bold text-gray-800">Mesa {ticket.tableNumber}</h3>
+          )}
         </div>
+        {!isTogo && (
+          <div className="flex gap-2">
+            <button
+              onClick={handleTableAvailable}
+              className="text-xs px-2 py-1 rounded bg-green-100 text-green-700 border border-green-300 hover:bg-green-200"
+            >
+              Disponible
+            </button>
+            <button
+              onClick={handleTableOccupied}
+              className="text-xs px-2 py-1 rounded bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
+            >
+              Ocupada
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Items */}
@@ -187,7 +205,9 @@ function OrderCard({ order }: { order: Order }) {
       <div className="flex items-center justify-between mb-3">
         <div>
           <span className="text-lg font-bold text-gray-800 font-mono">{order.pickupCode}</span>
-          <span className="ml-2 text-xs text-gray-500">{order.customerEmail}</span>
+          <span className="ml-2 text-sm font-medium text-gray-700">
+            {order.customerName || order.customerEmail}
+          </span>
         </div>
         <span className={`text-xs px-2 py-1 rounded-full font-medium ${ORDER_STATUS_COLORS[order.status] ?? ''}`}>
           {ORDER_STATUS_LABELS[order.status] ?? order.status}

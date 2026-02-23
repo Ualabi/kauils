@@ -25,7 +25,8 @@ const TAX_RATE = Number(import.meta.env.VITE_TAX_RATE) || 0.08;
 export async function createOrder(
   customerId: string,
   customerEmail: string,
-  cartItems: CartItem[]
+  cartItems: CartItem[],
+  customerName?: string
 ): Promise<Order> {
   try {
     // Generate unique pickup code
@@ -58,6 +59,7 @@ export async function createOrder(
       pickupCode,
       customerId,
       customerEmail,
+      ...(customerName ? { customerName } : {}),
       status: 'pending' as OrderStatus,
       items: orderItems,
       subtotal,

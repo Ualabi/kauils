@@ -28,7 +28,7 @@ export default function Checkout({ onOrderCreated }: CheckoutProps) {
     setError(null);
 
     try {
-      const order = await createOrder(user.uid, user.email, items);
+      const order = await createOrder(user.uid, user.email, items, user.displayName);
       clearCart();
       onOrderCreated(order.id, order.pickupCode);
     } catch (err: any) {

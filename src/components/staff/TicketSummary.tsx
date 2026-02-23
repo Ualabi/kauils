@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface TicketSummaryProps {
   ticket: Ticket;
-  tableNumber: number;
+  tableNumber?: number;
 }
 
 export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
@@ -30,15 +30,22 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
     }
   };
 
+  const isTogo = ticket.type === 'togo';
+
   const handleCloseTicket = async () => {
-    if (!confirm('¿Cerrar este ticket y liberar la mesa?')) return;
+    const msg = isTogo
+      ? `¿Cerrar el ticket de ${ticket.customerName}?`
+      : '¿Cerrar este ticket y liberar la mesa?';
+    if (!confirm(msg)) return;
 
     setClosing(true);
     setError(null);
 
     try {
       await closeTicket(ticket.id);
-      await clearTable(tableNumber);
+      if (!isTogo && tableNumber !== undefined) {
+        await clearTable(tableNumber);
+      }
       navigate('/staff');
     } catch (err) {
       console.error('Error closing ticket:', err);
@@ -61,8 +68,17 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
 
       <div className="space-y-2 mb-4">
         <div className="flex justify-between">
-          <span className="text-gray-600">Mesa:</span>
-          <span className="font-semibold">{tableNumber}</span>
+          {isTogo ? (
+            <>
+              <span className="text-gray-600">Cliente:</span>
+              <span className="font-semibold">{ticket.customerName}</span>
+            </>
+          ) : (
+            <>
+              <span className="text-gray-600">Mesa:</span>
+              <span className="font-semibold">{tableNumber}</span>
+            </>
+          )}
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Artículos:</span>
@@ -114,7 +130,7 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
             disabled={closing}
             className="btn-primary w-full"
           >
-            {closing ? 'Cerrando...' : 'Cerrar Ticket y Limpiar Mesa'}
+            {closing ? 'Cerrando...' : isTogo ? 'Cerrar Ticket' : 'Cerrar Ticket y Limpiar Mesa'}
           </button>
         </div>
       )}

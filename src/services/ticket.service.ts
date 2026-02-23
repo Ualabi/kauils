@@ -300,6 +300,70 @@ export function subscribeToKitchenTickets(
 }
 
 /**
+ * Create a new to-go ticket (no table, identified by customer name)
+ */
+export async function createTogoTicket(
+  customerName: string,
+  staffId: string
+): Promise<string> {
+  try {
+    const ticketRef = doc(collection(db, 'tickets'));
+    const ticketId = ticketRef.id;
+
+    const newTicket = {
+      type: 'togo' as const,
+      customerName,
+      staffId,
+      staffName: '',
+      status: 'open' as TicketStatus,
+      items: [],
+      total: 0,
+      subtotal: 0,
+      tax: 0,
+      createdAt: serverTimestamp() as Timestamp,
+      updatedAt: serverTimestamp() as Timestamp,
+    };
+
+    await setDoc(ticketRef, newTicket);
+    return ticketId;
+  } catch (error) {
+    console.error('Error creating togo ticket:', error);
+    throw error;
+  }
+}
+
+/**
+ * Subscribe to all open to-go tickets (real-time)
+ */
+export function subscribeToTogoTickets(
+  callback: (tickets: Ticket[]) => void
+): () => void {
+  const q = query(
+    collection(db, 'tickets'),
+    where('type', '==', 'togo')
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const tickets = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as Ticket))
+        .filter(t => t.status === 'open')
+        .sort((a, b) => {
+          const aSeconds = (a.createdAt as Timestamp)?.seconds ?? 0;
+          const bSeconds = (b.createdAt as Timestamp)?.seconds ?? 0;
+          return aSeconds - bSeconds;
+        });
+      callback(tickets);
+    },
+    (error) => {
+      console.error('Error subscribing to togo tickets:', error);
+      callback([]);
+    }
+  );
+}
+
+/**
  * Delete a ticket
  */
 export async function deleteTicket(ticketId: string): Promise<void> {

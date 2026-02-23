@@ -4,6 +4,7 @@ import {
   subscribeToTicket,
   subscribeToTableTickets,
   subscribeToKitchenTickets,
+  subscribeToTogoTickets,
 } from '../services/ticket.service';
 
 /**
@@ -62,6 +63,24 @@ export function useTableTickets(tableNumber: number | null) {
   }, [tableNumber]);
 
   return { tickets, loading, error };
+}
+
+/**
+ * Hook to subscribe to all open to-go tickets with real-time updates
+ */
+export function useTogoTickets() {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTogoTickets((updatedTickets) => {
+      setTickets(updatedTickets);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return { tickets, loading };
 }
 
 /**

@@ -59,6 +59,7 @@ export interface Order {
   pickupCode: string;
   customerId: string;
   customerEmail: string;
+  customerName?: string;
   status: OrderStatus;
   items: OrderItem[];
   subtotal: number;
@@ -106,7 +107,9 @@ export interface TicketItem {
 // Ticket interface (Staff table orders)
 export interface Ticket {
   id: string;
-  tableNumber: number;
+  type?: 'table' | 'togo';
+  tableNumber?: number;
+  customerName?: string;
   staffId: string;
   staffName: string;
   status: TicketStatus;

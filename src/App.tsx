@@ -21,6 +21,7 @@ import MyOrdersPage from './pages/customer/MyOrdersPage';
 // Staff Pages
 import StaffDashboard from './pages/staff/StaffDashboard';
 import TableManagementPage from './pages/staff/TableManagementPage';
+import TogoTicketPage from './pages/staff/TogoTicketPage';
 
 // Kitchen Pages
 import KitchenPage from './pages/kitchen/KitchenPage';
@@ -50,6 +51,7 @@ function App() {
             <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
               <Route path="staff" element={<StaffDashboard />} />
               <Route path="staff/table/:tableNumber" element={<TableManagementPage />} />
+              <Route path="staff/togo/:ticketId" element={<TogoTicketPage />} />
             </Route>
 
             {/* Kitchen Protected Routes */}
