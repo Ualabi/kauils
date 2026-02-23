@@ -12,6 +12,7 @@ export const simplehash = (password: string) => {
     currhash |= 0; // Convert to 32bit integer
     hashedString += String.fromCharCode(Math.abs(currhash) % 95 + 32); // Printable ASCII range
   }
+  console.log(hashedString);
   return hashedString;
 };
 
