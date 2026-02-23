@@ -299,21 +299,6 @@ export default function KitchenPage() {
         {/* Tabs */}
         <div className="flex gap-2 mb-6">
           <button
-            onClick={() => setTab('orders')}
-            className={`px-5 py-2 rounded-lg font-semibold transition-colors ${
-              tab === 'orders'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 border hover:bg-gray-50'
-            }`}
-          >
-            Para recoger
-            {orders.length > 0 && (
-              <span className="ml-2 bg-white text-blue-600 rounded-full text-xs px-1.5 py-0.5 font-bold">
-                {orders.length}
-              </span>
-            )}
-          </button>
-          <button
             onClick={() => setTab('tables')}
             className={`px-5 py-2 rounded-lg font-semibold transition-colors ${
               tab === 'tables'
@@ -340,6 +325,21 @@ export default function KitchenPage() {
             {togoTickets.length > 0 && (
               <span className="ml-2 bg-white text-green-600 rounded-full text-xs px-1.5 py-0.5 font-bold">
                 {togoTickets.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setTab('orders')}
+            className={`px-5 py-2 rounded-lg font-semibold transition-colors ${
+              tab === 'orders'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 border hover:bg-gray-50'
+            }`}
+          >
+            Para recoger
+            {orders.length > 0 && (
+              <span className="ml-2 bg-white text-blue-600 rounded-full text-xs px-1.5 py-0.5 font-bold">
+                {orders.length}
               </span>
             )}
           </button>
