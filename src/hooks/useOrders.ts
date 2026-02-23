@@ -10,6 +10,7 @@ import {
 import type { DocumentData } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import type { Order } from '../types';
+import { subscribeToActiveOrders } from '../services/order.service';
 
 /**
  * Hook to get real-time orders for a customer
@@ -57,4 +58,22 @@ export function useCustomerOrders(customerId: string | undefined) {
   }, [customerId]);
 
   return { orders, loading, error };
+}
+
+/**
+ * Hook to subscribe to all active orders for kitchen (real-time)
+ */
+export function useActiveOrders() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToActiveOrders((updatedOrders) => {
+      setOrders(updatedOrders);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return { orders, loading };
 }

@@ -22,6 +22,9 @@ import MyOrdersPage from './pages/customer/MyOrdersPage';
 import StaffDashboard from './pages/staff/StaffDashboard';
 import TableManagementPage from './pages/staff/TableManagementPage';
 
+// Kitchen Pages
+import KitchenPage from './pages/kitchen/KitchenPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -47,6 +50,11 @@ function App() {
             <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
               <Route path="staff" element={<StaffDashboard />} />
               <Route path="staff/table/:tableNumber" element={<TableManagementPage />} />
+            </Route>
+
+            {/* Kitchen Protected Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['kitchen']} />}>
+              <Route path="kitchen" element={<KitchenPage />} />
             </Route>
 
             {/* 404 Redirect */}

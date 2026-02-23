@@ -14,7 +14,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import type { Ticket, TicketItem, TicketStatus } from '../types';
+import type { Ticket, TicketItem, TicketStatus, TicketItemStatus } from '../types';
 
 /**
  * Create a new ticket for a table
@@ -227,6 +227,76 @@ export async function closeTicket(ticketId: string): Promise<void> {
     console.error('Error closing ticket:', error);
     throw error;
   }
+}
+
+/**
+ * Send a ticket to the kitchen
+ */
+export async function sendTicketToKitchen(ticketId: string): Promise<void> {
+  try {
+    await updateDoc(doc(db, 'tickets', ticketId), {
+      kitchenStatus: 'sent',
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error('Error sending ticket to kitchen:', error);
+    throw error;
+  }
+}
+
+/**
+ * Update the status of a single item inside a ticket
+ */
+export async function updateTicketItemStatus(
+  ticketId: string,
+  itemIndex: number,
+  status: TicketItemStatus
+): Promise<void> {
+  try {
+    const ticketRef = doc(db, 'tickets', ticketId);
+    const ticketDoc = await getDoc(ticketRef);
+    if (!ticketDoc.exists()) throw new Error('Ticket not found');
+
+    const ticket = ticketDoc.data() as Ticket;
+    const updatedItems = [...ticket.items];
+    updatedItems[itemIndex] = { ...updatedItems[itemIndex], status };
+
+    await updateDoc(ticketRef, { items: updatedItems });
+  } catch (error) {
+    console.error('Error updating ticket item status:', error);
+    throw error;
+  }
+}
+
+/**
+ * Subscribe to all tickets that have been sent to the kitchen (real-time)
+ */
+export function subscribeToKitchenTickets(
+  callback: (tickets: Ticket[]) => void
+): () => void {
+  const q = query(
+    collection(db, 'tickets'),
+    where('kitchenStatus', '==', 'sent')
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const tickets = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as Ticket))
+        .filter(t => t.status === 'open')
+        .sort((a, b) => {
+          const aSeconds = (a.createdAt as Timestamp)?.seconds ?? 0;
+          const bSeconds = (b.createdAt as Timestamp)?.seconds ?? 0;
+          return aSeconds - bSeconds;
+        });
+      callback(tickets);
+    },
+    (error) => {
+      console.error('Error subscribing to kitchen tickets:', error);
+      callback([]);
+    }
+  );
 }
 
 /**

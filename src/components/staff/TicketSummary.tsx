@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Ticket } from '../../types';
-import { closeTicket } from '../../services/ticket.service';
+import { closeTicket, sendTicketToKitchen } from '../../services/ticket.service';
 import { clearTable } from '../../services/table.service';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,12 +12,26 @@ interface TicketSummaryProps {
 export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
   const navigate = useNavigate();
   const [closing, setClosing] = useState(false);
+  const [sendingToKitchen, setSendingToKitchen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleCloseTicket = async () => {
-    if (!confirm('Close this ticket and clear the table?')) {
-      return;
+  const alreadySent = ticket.kitchenStatus === 'sent';
+
+  const handleSendToKitchen = async () => {
+    setSendingToKitchen(true);
+    setError(null);
+    try {
+      await sendTicketToKitchen(ticket.id);
+    } catch (err) {
+      console.error('Error enviando a cocina:', err);
+      setError('No se pudo enviar a cocina');
+    } finally {
+      setSendingToKitchen(false);
     }
+  };
+
+  const handleCloseTicket = async () => {
+    if (!confirm('¿Cerrar este ticket y liberar la mesa?')) return;
 
     setClosing(true);
     setError(null);
@@ -28,7 +42,7 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
       navigate('/staff');
     } catch (err) {
       console.error('Error closing ticket:', err);
-      setError('Failed to close ticket');
+      setError('No se pudo cerrar el ticket');
       setClosing(false);
     }
   };
@@ -37,7 +51,7 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
 
   return (
     <div className="card bg-gray-50">
-      <h2 className="text-xl font-bold mb-4">Ticket Summary</h2>
+      <h2 className="text-xl font-bold mb-4">Resumen del Ticket</h2>
 
       {error && (
         <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded mb-4">
@@ -51,17 +65,19 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
           <span className="font-semibold">{tableNumber}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Items:</span>
+          <span className="text-gray-600">Artículos:</span>
           <span className="font-semibold">{itemCount}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Status:</span>
-          <span
-            className={`font-semibold ${
-              ticket.status === 'open' ? 'text-green-600' : 'text-gray-600'
-            }`}
-          >
-            {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
+          <span className="text-gray-600">Estado:</span>
+          <span className={`font-semibold ${ticket.status === 'open' ? 'text-green-600' : 'text-gray-600'}`}>
+            {ticket.status === 'open' ? 'Abierto' : 'Cerrado'}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-600">Cocina:</span>
+          <span className={`font-semibold ${alreadySent ? 'text-orange-600' : 'text-gray-400'}`}>
+            {alreadySent ? 'Enviado' : 'No enviado'}
           </span>
         </div>
       </div>
@@ -76,13 +92,31 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
       </div>
 
       {ticket.status === 'open' && ticket.items.length > 0 && (
-        <button
-          onClick={handleCloseTicket}
-          disabled={closing}
-          className="btn-primary w-full"
-        >
-          {closing ? 'Cerrando...' : 'Cerrar Ticket y Limpiar Mesa'}
-        </button>
+        <div className="space-y-2">
+          <button
+            onClick={handleSendToKitchen}
+            disabled={sendingToKitchen}
+            className={`w-full font-semibold py-2 px-4 rounded transition-colors ${
+              alreadySent
+                ? 'bg-orange-100 text-orange-700 border border-orange-300 hover:bg-orange-200'
+                : 'bg-orange-500 text-white hover:bg-orange-600'
+            }`}
+          >
+            {sendingToKitchen
+              ? 'Enviando...'
+              : alreadySent
+              ? 'Actualizar cocina'
+              : 'Enviar a cocina'}
+          </button>
+
+          <button
+            onClick={handleCloseTicket}
+            disabled={closing}
+            className="btn-primary w-full"
+          >
+            {closing ? 'Cerrando...' : 'Cerrar Ticket y Limpiar Mesa'}
+          </button>
+        </div>
       )}
     </div>
   );

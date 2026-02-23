@@ -50,6 +50,7 @@ export interface OrderItem {
   basePrice: number;
   customizations?: Customization[];
   itemTotal: number;
+  status?: TicketItemStatus;
 }
 
 // Order interface (Customer pickup orders)
@@ -84,6 +85,9 @@ export interface Table {
 // Ticket status
 export type TicketStatus = 'open' | 'closed';
 
+// Item-level kitchen status (used by both TicketItem and OrderItem)
+export type TicketItemStatus = 'received' | 'cooking' | 'ready' | 'served' | 'canceled';
+
 // Ticket item (similar to order item but with staff tracking)
 export interface TicketItem {
   menuItemId: string;
@@ -91,6 +95,7 @@ export interface TicketItem {
   name: string;
   price: number;
   quantity: number;
+  status?: TicketItemStatus;
   basePrice?: number;
   customizations?: Customization[];
   itemTotal?: number;
@@ -105,6 +110,7 @@ export interface Ticket {
   staffId: string;
   staffName: string;
   status: TicketStatus;
+  kitchenStatus?: 'pending' | 'sent';
   items: TicketItem[];
   subtotal: number;
   tax: number;

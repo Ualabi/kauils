@@ -7,11 +7,12 @@ import {
   getDoc,
   addDoc,
   updateDoc,
+  onSnapshot,
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import type { Order, OrderItem, CartItem, OrderStatus } from '../types';
+import type { Order, OrderItem, CartItem, OrderStatus, TicketItemStatus } from '../types';
 import { generateUniquePickupCode } from './pickupCode.service';
 
 // Tax rate from environment
@@ -151,6 +152,63 @@ export async function updateOrderStatus(
     console.error('Error updating order status:', error);
     throw error;
   }
+}
+
+/**
+ * Update the status of a single item inside an order (kitchen use)
+ */
+export async function updateOrderItemStatus(
+  orderId: string,
+  itemIndex: number,
+  status: TicketItemStatus
+): Promise<void> {
+  try {
+    const orderRef = doc(db, 'orders', orderId);
+    const orderDoc = await getDoc(orderRef);
+    if (!orderDoc.exists()) throw new Error('Order not found');
+
+    const order = orderDoc.data() as Order;
+    const updatedItems = [...order.items];
+    updatedItems[itemIndex] = { ...updatedItems[itemIndex], status };
+
+    await updateDoc(orderRef, {
+      items: updatedItems,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error('Error updating order item status:', error);
+    throw error;
+  }
+}
+
+/**
+ * Subscribe to all active orders for kitchen (pending, preparing, ready)
+ */
+export function subscribeToActiveOrders(
+  callback: (orders: Order[]) => void
+): () => void {
+  const q = query(
+    collection(db, 'orders'),
+    where('status', 'in', ['pending', 'preparing', 'ready'])
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const orders = snapshot.docs
+        .map(d => ({ id: d.id, ...d.data() } as Order))
+        .sort((a, b) => {
+          const aSeconds = (a.createdAt as Timestamp)?.seconds ?? 0;
+          const bSeconds = (b.createdAt as Timestamp)?.seconds ?? 0;
+          return aSeconds - bSeconds;
+        });
+      callback(orders);
+    },
+    (error) => {
+      console.error('Error subscribing to active orders:', error);
+      callback([]);
+    }
+  );
 }
 
 /**

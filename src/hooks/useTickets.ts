@@ -3,6 +3,7 @@ import type { Ticket } from '../types';
 import {
   subscribeToTicket,
   subscribeToTableTickets,
+  subscribeToKitchenTickets,
 } from '../services/ticket.service';
 
 /**
@@ -61,4 +62,22 @@ export function useTableTickets(tableNumber: number | null) {
   }, [tableNumber]);
 
   return { tickets, loading, error };
+}
+
+/**
+ * Hook to subscribe to all kitchen tickets (sent to kitchen, open) with real-time updates
+ */
+export function useKitchenTickets() {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToKitchenTickets((updatedTickets) => {
+      setTickets(updatedTickets);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return { tickets, loading };
 }
