@@ -269,11 +269,13 @@ function OrderCard({ order }: { order: Order }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function KitchenPage() {
-  const [tab, setTab] = useState<'orders' | 'tables'>('orders');
+  const [tab, setTab] = useState<'orders' | 'tables' | 'togo'>('orders');
   const { tickets, loading: ticketsLoading } = useKitchenTickets();
   const { orders, loading: ordersLoading } = useActiveOrders();
   const { tables } = useTables();
 
+  const tableTickets = tickets.filter((t) => t.type !== 'togo');
+  const togoTickets  = tickets.filter((t) => t.type === 'togo');
   const occupiedTables = tables.filter((t) => t.status === 'occupied');
 
   return (
@@ -295,7 +297,7 @@ export default function KitchenPage() {
                 : 'bg-white text-gray-600 border hover:bg-gray-50'
             }`}
           >
-            Pedidos de Clientes
+            Para recoger
             {orders.length > 0 && (
               <span className="ml-2 bg-white text-blue-600 rounded-full text-xs px-1.5 py-0.5 font-bold">
                 {orders.length}
@@ -311,15 +313,30 @@ export default function KitchenPage() {
             }`}
           >
             Mesas
-            {tickets.length > 0 && (
+            {tableTickets.length > 0 && (
               <span className="ml-2 bg-white text-orange-500 rounded-full text-xs px-1.5 py-0.5 font-bold">
-                {tickets.length}
+                {tableTickets.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setTab('togo')}
+            className={`px-5 py-2 rounded-lg font-semibold transition-colors ${
+              tab === 'togo'
+                ? 'bg-green-600 text-white'
+                : 'bg-white text-gray-600 border hover:bg-gray-50'
+            }`}
+          >
+            Para llevar
+            {togoTickets.length > 0 && (
+              <span className="ml-2 bg-white text-green-600 rounded-full text-xs px-1.5 py-0.5 font-bold">
+                {togoTickets.length}
               </span>
             )}
           </button>
         </div>
 
-        {/* ── Customer orders tab ── */}
+        {/* ── Para recoger tab (online customer orders) ── */}
         {tab === 'orders' && (
           <>
             {ordersLoading ? (
@@ -338,7 +355,7 @@ export default function KitchenPage() {
           </>
         )}
 
-        {/* ── Tables tab ── */}
+        {/* ── Mesas tab ── */}
         {tab === 'tables' && (
           <>
             {/* Quick table status overview */}
@@ -359,9 +376,9 @@ export default function KitchenPage() {
 
             {ticketsLoading ? (
               <div className="text-center py-16 text-gray-500">Cargando tickets...</div>
-            ) : tickets.length === 0 ? (
+            ) : tableTickets.length === 0 ? (
               <div className="text-center py-16 text-gray-400">
-                No hay tickets enviados a cocina
+                No hay tickets de mesa enviados a cocina
                 {occupiedTables.length > 0 && (
                   <p className="text-sm mt-2">
                     ({occupiedTables.length} mesa(s) ocupada(s) — el mesero aún no ha enviado el pedido)
@@ -370,7 +387,26 @@ export default function KitchenPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {tickets.map((ticket) => (
+                {tableTickets.map((ticket) => (
+                  <TicketCard key={ticket.id} ticket={ticket} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ── Para llevar tab ── */}
+        {tab === 'togo' && (
+          <>
+            {ticketsLoading ? (
+              <div className="text-center py-16 text-gray-500">Cargando órdenes...</div>
+            ) : togoTickets.length === 0 ? (
+              <div className="text-center py-16 text-gray-400">
+                No hay órdenes para llevar en este momento
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {togoTickets.map((ticket) => (
                   <TicketCard key={ticket.id} ticket={ticket} />
                 ))}
               </div>
