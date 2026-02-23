@@ -36,7 +36,7 @@ export default function Header() {
                 {userRole === 'customer' && (
                   <>
                     <Link to="/menu" className="text-gray-700 hover:text-red-600">
-                      Menu
+                      Ordena
                     </Link>
                     <Link to="/cart" className="text-gray-700 hover:text-red-600">
                       Carro
