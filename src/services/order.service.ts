@@ -42,7 +42,7 @@ export async function createOrder(
         menuItemName: cartItem.menuItem.name,
         quantity: cartItem.quantity,
         basePrice: cartItem.menuItem.basePrice,
-        customizations: cartItem.customizations,
+        customizations: cartItem.customizations ?? [],
         itemTotal,
       };
     });
