@@ -29,7 +29,7 @@ export async function createOrder(
   try {
     // Generate unique pickup code
     const pickupCode = await generateUniquePickupCode();
-
+    console.log(`Generated pickup code: ${pickupCode}`); // Debug log
     // Convert cart items to order items
     const orderItems: OrderItem[] = cartItems.map((cartItem) => {
       const customizationsPrice =
@@ -65,8 +65,9 @@ export async function createOrder(
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
-
+    console.log('Creating order with data:', orderData); // Debug log 
     const ordersRef = collection(db, 'orders');
+    console.log('Orders collection reference:', ordersRef); // Debug log
     const docRef = await addDoc(ordersRef, orderData);
 
     // Return the created order with the generated ID
