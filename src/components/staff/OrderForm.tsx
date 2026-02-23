@@ -82,7 +82,7 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
   const burgers = availableItems.filter((item) => item.category === 'burger');
   const extras = availableItems.filter((item) => item.category === 'extras');
   const drinks = availableItems.filter((item) => item.category === 'drink');
-  // const desserts = availableItems.filter((item) => item.category === 'dessert');
+  const desserts = availableItems.filter((item) => item.category === 'dessert');
 
   return (
     <div className="card">
@@ -148,6 +148,30 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
             <h3 className="font-semibold mb-2">Bebidas</h3>
             <div className="space-y-2">
               {drinks.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleSelectItem(item)}
+                  className={`w-full text-left px-3 py-2 rounded border transition-colors ${
+                    selectedItem?.id === item.id
+                      ? 'bg-red-100 border-red-500'
+                      : 'bg-white border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="font-medium">{item.name}</div>
+                  <div className="text-sm text-gray-600">
+                    ${item.basePrice.toFixed(2)}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {desserts.length > 0 && (
+          <div>
+            <h3 className="font-semibold mb-2">Postres</h3>
+            <div className="space-y-2">
+              {desserts.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleSelectItem(item)}
