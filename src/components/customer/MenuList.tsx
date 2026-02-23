@@ -8,7 +8,7 @@ export default function MenuList() {
   const [selectedCategory, setSelectedCategory] = useState<MenuCategory | 'all'>('all');
 
   const categories: { value: MenuCategory | 'all'; label: string }[] = [
-    { value: 'all', label: 'All Items' },
+    { value: 'all', label: 'Todo' },
     { value: 'burger', label: 'Hamburguesas' },
     { value: 'extras', label: 'Extras' },
     { value: 'drink', label: 'Bebidas' },
@@ -41,7 +41,7 @@ export default function MenuList() {
     return (
       <div className="text-center py-12">
         <p className="text-gray-600">
-          No menu items available. Please check back later.
+          El menú no está disponible por el momento. Vuelve más tarde.
         </p>
       </div>
     );
@@ -69,7 +69,7 @@ export default function MenuList() {
       {/* Menu Items Grid */}
       {filteredItems.length === 0 ? (
         <p className="text-center text-gray-600 py-8">
-          No items in this category.
+          No hay artículos en esta categoría.
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

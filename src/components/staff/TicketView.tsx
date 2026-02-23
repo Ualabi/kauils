@@ -126,6 +126,18 @@ export function TicketView({ ticket }: TicketViewProps) {
                 </div>
               </div>
 
+              {/* Kitchen status badge */}
+              {currentStatus === 'cooking' && (
+                <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded bg-orange-100 text-orange-700 border border-orange-300 text-xs font-semibold">
+                  🍳 Cocinando
+                </div>
+              )}
+              {currentStatus === 'ready' && (
+                <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded bg-green-100 text-green-700 border border-green-300 text-xs font-semibold">
+                  ✓ ¡Listo para recoger!
+                </div>
+              )}
+
               {/* Status buttons */}
               <div className="flex gap-2 mt-2">
                 {STAFF_STATUSES.map((s) => (

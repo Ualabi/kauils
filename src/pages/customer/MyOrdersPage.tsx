@@ -12,11 +12,11 @@ const statusColors: Record<OrderStatus, string> = {
 };
 
 const statusLabels: Record<OrderStatus, string> = {
-  pending: 'Pending',
-  preparing: 'Preparing',
-  ready: 'Ready for Pickup',
-  completed: 'Completed',
-  cancelled: 'Cancelled',
+  pending: 'Pendiente',
+  preparing: 'Preparando',
+  ready: 'Listo para recoger',
+  completed: 'Completado',
+  cancelled: 'Cancelado',
 };
 
 function OrderCard({ order }: { order: Order }) {
@@ -37,17 +37,17 @@ function OrderCard({ order }: { order: Order }) {
             </span>
           </div>
           <p className="text-sm text-gray-600 mt-1">
-            Ordered {formatDate(order.createdAt)}
+            Pedido el {formatDate(order.createdAt)}
           </p>
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold text-gray-900">${order.total.toFixed(2)}</p>
-          <p className="text-sm text-gray-600">{order.items.length} items</p>
+          <p className="text-sm text-gray-600">{order.items.length} artículos</p>
         </div>
       </div>
 
       <div className="border-t border-gray-200 pt-4">
-        <h4 className="font-medium text-gray-900 mb-2">Items:</h4>
+        <h4 className="font-medium text-gray-900 mb-2">Artículos:</h4>
         <ul className="space-y-2">
           {order.items.map((item, index) => (
             <li key={index} className="flex justify-between text-sm">
@@ -70,7 +70,7 @@ function OrderCard({ order }: { order: Order }) {
       {order.status === 'ready' && (
         <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
           <p className="text-green-800 font-medium text-center">
-            🎉 Your order is ready! Show code <strong>{order.pickupCode}</strong> at the counter
+            🎉 ¡Tu pedido está listo! Muestra el código <strong>{order.pickupCode}</strong> en el mostrador
           </p>
         </div>
       )}
@@ -87,7 +87,7 @@ export default function MyOrdersPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading orders...</p>
+          <p className="mt-4 text-gray-600">Cargando pedidos...</p>
         </div>
       </div>
     );
@@ -105,13 +105,13 @@ export default function MyOrdersPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">My Orders</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Mis Pedidos</h1>
 
       {orders.length === 0 ? (
         <div className="card text-center">
-          <p className="text-gray-600 mb-4">You haven't placed any orders yet</p>
+          <p className="text-gray-600 mb-4">Aún no has hecho ningún pedido</p>
           <a href="/menu" className="btn-primary inline-block">
-            Browse Menu
+            Ver Menú
           </a>
         </div>
       ) : (

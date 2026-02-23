@@ -25,7 +25,7 @@ export default function LoginPage() {
       }, 500);
     } catch (err: unknown) {
       console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to log in. Please check your credentials.');
+      setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión. Verifica tus credenciales.');
     } finally {
       setLoading(false);
     }

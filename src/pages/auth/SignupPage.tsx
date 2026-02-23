@@ -40,7 +40,7 @@ export default function SignupPage() {
       navigate('/menu');
     } catch (err) {
       console.error('Signup error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to create account. Please try again.');
+      setError(err instanceof Error ? err.message : 'No se pudo crear la cuenta. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -133,7 +133,7 @@ export default function SignupPage() {
               disabled={loading}
               className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating account...' : 'Sign Up'}
+              {loading ? 'Creando cuenta...' : 'Registrarme'}
             </button>
           </form>
 

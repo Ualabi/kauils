@@ -40,7 +40,7 @@ export default function TableManagementPage() {
       await assignTicketToTable(tableNumber, ticketId, user.uid);
     } catch (err) {
       console.error('Error creating ticket:', err);
-      setError('Failed to create ticket');
+      setError('No se pudo crear el ticket');
     } finally {
       setCreatingTicket(false);
     }
@@ -49,7 +49,7 @@ export default function TableManagementPage() {
   if (tableLoading || ticketsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">Cargando...</div>
       </div>
     );
   }
@@ -58,9 +58,9 @@ export default function TableManagementPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-600 mb-4">Table not found</div>
+          <div className="text-red-600 mb-4">Mesa no encontrada</div>
           <Link to="/staff" className="btn-primary">
-            Back to Dashboard
+            Volver al panel
           </Link>
         </div>
       </div>
@@ -76,12 +76,12 @@ export default function TableManagementPage() {
               <Link
                 to="/staff"
                 className="text-gray-600 hover:text-gray-900"
-                title="Back to Dashboard"
+                title="Volver al panel"
               >
-                ← Back
+                ← Volver
               </Link>
               <h1 className="text-3xl font-bold text-gray-900">
-                Table {tableNumber}
+                Mesa {tableNumber}
               </h1>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -90,7 +90,7 @@ export default function TableManagementPage() {
                     : 'bg-green-100 text-green-700'
                 }`}
               >
-                {table.status.charAt(0).toUpperCase() + table.status.slice(1)}
+                {table.status === 'occupied' ? 'Ocupada' : 'Disponible'}
               </span>
             </div>
           </div>
@@ -105,9 +105,9 @@ export default function TableManagementPage() {
         {!currentTicket ? (
           <div className="card text-center py-12">
             <div className="mb-4">
-              <div className="text-gray-600 mb-2">No active ticket for this table</div>
+              <div className="text-gray-600 mb-2">No hay ticket activo para esta mesa</div>
               <div className="text-sm text-gray-500">
-                Create a new ticket to start taking orders
+                Crea un nuevo ticket para comenzar a tomar órdenes
               </div>
             </div>
             <button
@@ -115,7 +115,7 @@ export default function TableManagementPage() {
               disabled={creatingTicket}
               className="btn-primary"
             >
-              {creatingTicket ? 'Creating...' : 'Create New Ticket'}
+              {creatingTicket ? 'Creando...' : 'Crear Nuevo Ticket'}
             </button>
           </div>
         ) : (

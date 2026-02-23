@@ -75,7 +75,7 @@ export default function MenuItemCard({ menuItem }: MenuItemCardProps) {
             onClick={() => setShowCustomizations(!showCustomizations)}
             className="text-sm text-red-600 hover:text-red-700 font-medium"
           >
-            {showCustomizations ? 'Hide' : 'Show'} Customizations
+            {showCustomizations ? 'Ocultar' : 'Ver'} personalizaciones
           </button>
 
           {showCustomizations && (
@@ -128,7 +128,7 @@ export default function MenuItemCard({ menuItem }: MenuItemCardProps) {
           className="flex-1 btn-primary"
           disabled={added}
         >
-          {added ? '✓ Added!' : 'Add to Cart'}
+          {added ? '✓ Agregado' : 'Agregar al carrito'}
         </button>
       </div>
     </div>

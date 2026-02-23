@@ -14,7 +14,7 @@ export default function SeedPage() {
 
     try {
       await seedMenuItems();
-      setMessage('✅ Menu items seeded successfully!');
+      setMessage('✅ Productos del menú cargados correctamente.');
     } catch (err: any) {
       setError(`Error: ${err.message}`);
     } finally {
@@ -29,7 +29,7 @@ export default function SeedPage() {
 
     try {
       await seedTables(20);
-      setMessage('✅ 20 tables initialized successfully!');
+      setMessage('✅ 20 mesas inicializadas correctamente.');
     } catch (err: any) {
       setError(`Error: ${err.message}`);
     } finally {
@@ -49,7 +49,7 @@ export default function SeedPage() {
         'Staff Member',
         'STAFF001'
       );
-      setMessage('✅ Staff account created! Email: staff@kauils.com, Password: staff123');
+      setMessage('✅ Cuenta de staff creada. Email: staff@kauils.com, Contraseña: staff123');
     } catch (err: any) {
       setError(`Error: ${err.message}`);
     } finally {
@@ -61,9 +61,9 @@ export default function SeedPage() {
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="card">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Database Seeding</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">Inicialización de Base de Datos</h1>
           <p className="text-gray-600 mb-8">
-            Use these buttons to populate your database with sample data for testing.
+            Usa estos botones para poblar la base de datos con datos iniciales.
           </p>
 
           <div className="space-y-4">
@@ -73,10 +73,10 @@ export default function SeedPage() {
                 disabled={loading}
                 className="btn-primary w-full disabled:opacity-50"
               >
-                {loading ? 'Seeding...' : 'Seed Menu Items'}
+                {loading ? 'Cargando...' : 'Cargar Menú'}
               </button>
               <p className="text-sm text-gray-600 mt-2">
-                Adds 10 sample menu items (burgers, sides, drinks)
+                Agrega los productos del menú (hamburguesas, bebidas, extras, postres)
               </p>
             </div>
 
@@ -86,10 +86,10 @@ export default function SeedPage() {
                 disabled={loading}
                 className="btn-primary w-full disabled:opacity-50"
               >
-                {loading ? 'Initializing...' : 'Initialize Tables'}
+                {loading ? 'Inicializando...' : 'Inicializar Mesas'}
               </button>
               <p className="text-sm text-gray-600 mt-2">
-                Creates 20 tables in the database for staff management
+                Crea 20 mesas en la base de datos para la gestión del personal
               </p>
             </div>
 
@@ -99,10 +99,10 @@ export default function SeedPage() {
                 disabled={loading}
                 className="btn-primary w-full disabled:opacity-50"
               >
-                {loading ? 'Creating...' : 'Create Staff Account'}
+                {loading ? 'Creando...' : 'Crear Cuenta de Staff'}
               </button>
               <p className="text-sm text-gray-600 mt-2">
-                Creates a staff account (email: staff@kauils.com, password: staff123)
+                Crea una cuenta de staff (email: staff@kauils.com, contraseña: staff123)
               </p>
             </div>
           </div>
@@ -120,10 +120,10 @@ export default function SeedPage() {
           )}
 
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <h2 className="font-bold text-gray-900 mb-2">Test Accounts</h2>
+            <h2 className="font-bold text-gray-900 mb-2">Cuentas de prueba</h2>
             <div className="text-sm text-gray-600 space-y-1">
-              <p><strong>Customer:</strong> Create your own via the signup page</p>
-              <p><strong>Staff:</strong> staff@kauils.com / staff123 (after creation)</p>
+              <p><strong>Cliente:</strong> Crea la tuya en la página de registro</p>
+              <p><strong>Staff:</strong> staff@kauils.com / staff123 (después de crear la cuenta)</p>
             </div>
           </div>
         </div>
