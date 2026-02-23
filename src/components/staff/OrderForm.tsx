@@ -67,25 +67,26 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
         onItemAdded();
       }
     } catch (err) {
-      console.error('Error adding item to ticket:', err);
-      setError('Failed to add item to ticket');
+      console.error('Error al añadir el artículo al ticket:', err);
+      setError('Error al añadir el artículo al ticket');
     } finally {
       setAdding(false);
     }
   };
 
   if (loading) {
-    return <div className="text-center py-4">Loading menu...</div>;
+    return <div className="text-center py-4">Cargando menú...</div>;
   }
 
   const availableItems = menuItems.filter((item) => item.available);
   const burgers = availableItems.filter((item) => item.category === 'burger');
-  const sides = availableItems.filter((item) => item.category === 'side');
+  const extras = availableItems.filter((item) => item.category === 'extras');
   const drinks = availableItems.filter((item) => item.category === 'drink');
+  // const desserts = availableItems.filter((item) => item.category === 'dessert');
 
   return (
     <div className="card">
-      <h2 className="text-xl font-bold mb-4">Add Items to Order</h2>
+      <h2 className="text-xl font-bold mb-4">Añade artículos al ticket</h2>
 
       {error && (
         <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded mb-4">
@@ -96,7 +97,7 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {burgers.length > 0 && (
           <div>
-            <h3 className="font-semibold mb-2">Burgers</h3>
+            <h3 className="font-semibold mb-2">Hamburguesas</h3>
             <div className="space-y-2">
               {burgers.map((item) => (
                 <button
@@ -118,11 +119,11 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
           </div>
         )}
 
-        {sides.length > 0 && (
+        {extras.length > 0 && (
           <div>
-            <h3 className="font-semibold mb-2">Sides</h3>
+            <h3 className="font-semibold mb-2">Extras</h3>
             <div className="space-y-2">
-              {sides.map((item) => (
+              {extras.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleSelectItem(item)}
@@ -144,7 +145,7 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
 
         {drinks.length > 0 && (
           <div>
-            <h3 className="font-semibold mb-2">Drinks</h3>
+            <h3 className="font-semibold mb-2">Bebidas</h3>
             <div className="space-y-2">
               {drinks.map((item) => (
                 <button
@@ -174,7 +175,7 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
           {selectedItem.customizations &&
             selectedItem.customizations.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2">Customizations</h4>
+                <h4 className="text-sm font-medium mb-2">Personalizaciones</h4>
                 <div className="space-y-2">
                   {selectedItem.customizations.map((custom) => (
                     <label
@@ -200,7 +201,7 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
             )}
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Quantity</label>
+            <label className="block text-sm font-medium mb-2">Cantidad</label>
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -229,7 +230,7 @@ export function OrderForm({ ticketId, onItemAdded }: OrderFormProps) {
               disabled={adding}
               className="btn-primary"
             >
-              {adding ? 'Adding...' : 'Add to Ticket'}
+              {adding ? 'Añadiendo...' : 'Añadido al Ticket'}
             </button>
           </div>
         </div>
