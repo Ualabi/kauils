@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
 // User roles
-export type UserRole = 'customer' | 'staff' | 'kitchen' | 'admin' | 'it';
+export type UserRole = 'customer' | 'staff' | 'expo' | 'admin' | 'it';
 
 // User interface
 export interface User {

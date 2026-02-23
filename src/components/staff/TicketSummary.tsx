@@ -91,7 +91,7 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Cocina:</span>
+          <span className="text-gray-600">Expo:</span>
           <span className={`font-semibold ${alreadySent ? 'text-orange-600' : 'text-gray-400'}`}>
             {alreadySent ? 'Enviado' : 'No enviado'}
           </span>
@@ -121,8 +121,8 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
             {sendingToKitchen
               ? 'Enviando...'
               : alreadySent
-              ? 'Actualizar cocina'
-              : 'Enviar a cocina'}
+              ? 'Actualizar expo'
+              : 'Enviar a expo'}
           </button>
 
           <button

@@ -292,7 +292,7 @@ export default function KitchenPage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Page header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Panel de Cocina</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Panel de Expo</h1>
           <p className="text-gray-500 mt-1">Vista en tiempo real de pedidos y mesas</p>
         </div>
 

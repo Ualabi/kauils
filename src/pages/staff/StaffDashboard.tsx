@@ -111,7 +111,7 @@ export default function StaffDashboard() {
                   </div>
                   {ticket.kitchenStatus === 'sent' && (
                     <div className="text-xs text-green-600 font-medium mt-1">
-                      ✓ En cocina
+                      ✓ En expo
                     </div>
                   )}
                 </Link>

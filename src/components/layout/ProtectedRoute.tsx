@@ -31,7 +31,7 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     // Redirect to appropriate home page based on role
     const redirectPath =
       userRole === 'customer' ? '/menu' :
-      userRole === 'kitchen'  ? '/kitchen' : '/staff';
+      userRole === 'expo'  ? '/expo' : '/staff';
     return <Navigate to={redirectPath} replace />;
   }
 

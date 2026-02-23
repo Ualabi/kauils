@@ -23,7 +23,7 @@ import StaffDashboard from './pages/staff/StaffDashboard';
 import TableManagementPage from './pages/staff/TableManagementPage';
 import TogoTicketPage from './pages/staff/TogoTicketPage';
 
-// Kitchen Pages
+// Expo Pages
 import KitchenPage from './pages/kitchen/KitchenPage';
 
 function App() {
@@ -54,9 +54,9 @@ function App() {
               <Route path="staff/togo/:ticketId" element={<TogoTicketPage />} />
             </Route>
 
-            {/* Kitchen Protected Routes */}
-            <Route element={<ProtectedRoute allowedRoles={['kitchen']} />}>
-              <Route path="kitchen" element={<KitchenPage />} />
+            {/* Expo Protected Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['expo']} />}>
+              <Route path="expo" element={<KitchenPage />} />
             </Route>
 
             {/* 404 Redirect */}

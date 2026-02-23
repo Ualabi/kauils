@@ -51,9 +51,9 @@ export default function Header() {
                     Panel
                   </Link>
                 )}
-                {userRole === 'kitchen' && (
-                  <Link to="/kitchen" className="text-gray-700 hover:text-red-600">
-                    Cocina
+                {userRole === 'expo' && (
+                  <Link to="/expo" className="text-gray-700 hover:text-red-600">
+                    Expo
                   </Link>
                 )}
                 <button
