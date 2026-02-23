@@ -50,8 +50,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // User state will be updated by onAuthStateChanged listener
   };
 
-  const signup = async (email: string, password: string, displayName: string): Promise<void> => {
-    await authService.signup(email, password, displayName);
+  const signup = async (email: string, phone: string, password: string, displayName: string): Promise<void> => {
+    await authService.signup(email, phone, password, displayName);
     // User state will be updated by onAuthStateChanged listener
   };
 
