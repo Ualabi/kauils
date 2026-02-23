@@ -16,7 +16,7 @@ import type { Table, TableStatus } from '../types';
  * Initialize all tables (1-20) in the database
  * Should be run once during setup
  */
-export async function initializeTables(count: number = 20): Promise<void> {
+export async function initializeTables(count: number = 12): Promise<void> {
   try {
     const batch = [];
     for (let i = 1; i <= count; i++) {

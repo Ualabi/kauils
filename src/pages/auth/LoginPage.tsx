@@ -61,7 +61,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="input-field"
-                placeholder="you@example.com"
+                placeholder="correo@ejemplo.com"
               />
             </div>
 
@@ -93,7 +93,7 @@ export default function LoginPage() {
             <p className="text-sm text-gray-600">
               ¿No tienes cuenta?{' '}
               <Link to="/signup" className="text-red-600 hover:text-red-700 font-medium">
-                Regístrate como cliente
+                Regístrate
               </Link>
             </p>
           </div>

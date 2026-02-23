@@ -16,7 +16,7 @@ export interface User {
 }
 
 // Menu item category
-export type MenuCategory = 'burger' | 'side' | 'drink';
+export type MenuCategory = 'burger' | 'extras' | 'drink' | 'dessert';
 
 // Customization option
 export interface Customization {

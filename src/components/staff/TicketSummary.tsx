@@ -47,7 +47,7 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
 
       <div className="space-y-2 mb-4">
         <div className="flex justify-between">
-          <span className="text-gray-600">Table:</span>
+          <span className="text-gray-600">Mesa:</span>
           <span className="font-semibold">{tableNumber}</span>
         </div>
         <div className="flex justify-between">
@@ -81,7 +81,7 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
           disabled={closing}
           className="btn-primary w-full"
         >
-          {closing ? 'Closing...' : 'Close Ticket & Clear Table'}
+          {closing ? 'Cerrando...' : 'Cerrar Ticket y Limpiar Mesa'}
         </button>
       )}
     </div>

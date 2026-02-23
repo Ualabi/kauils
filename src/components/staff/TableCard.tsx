@@ -18,14 +18,14 @@ export function TableCard({ table }: TableCardProps) {
       }`}
     >
       <div className="text-3xl font-bold mb-2">
-        Table {table.tableNumber}
+        Mesa {table.tableNumber}
       </div>
       <div
         className={`text-sm font-medium ${
           isOccupied ? 'text-red-700' : 'text-green-700'
         }`}
       >
-        {isOccupied ? 'Occupied' : 'Available'}
+        {isOccupied ? 'Ocupada' : 'Disponible'}
       </div>
       {table.currentTicketId && (
         <div className="mt-2 text-xs text-gray-600">

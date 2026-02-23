@@ -8,7 +8,7 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <div className="card text-center">
-        <p className="text-gray-600 mb-4">Your cart is empty</p>
+        <p className="text-gray-600 mb-4">Tu carro está vacío</p>
         <Link to="/menu" className="btn-primary inline-block">
           Browse Menu
         </Link>

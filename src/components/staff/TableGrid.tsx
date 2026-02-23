@@ -7,7 +7,7 @@ export function TableGrid() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-600">Loading tables...</div>
+        <div className="text-gray-600">Cargando mesas...</div>
       </div>
     );
   }
@@ -15,7 +15,7 @@ export function TableGrid() {
   if (error) {
     return (
       <div className="text-center py-12">
-        <div className="text-red-600">Error loading tables</div>
+        <div className="text-red-600">Error cargando mesas</div>
       </div>
     );
   }
@@ -23,9 +23,9 @@ export function TableGrid() {
   if (tables.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-600">No tables available</div>
+        <div className="text-gray-600">No hay mesas disponibles</div>
         <div className="text-sm text-gray-500 mt-2">
-          Tables need to be initialized in the database
+          Las mesas deben ser inicializadas en la base de datos para aparecer aquí. Por favor, contacta al administrador para configurar las mesas.
         </div>
       </div>
     );

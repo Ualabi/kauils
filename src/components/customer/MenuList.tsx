@@ -9,9 +9,10 @@ export default function MenuList() {
 
   const categories: { value: MenuCategory | 'all'; label: string }[] = [
     { value: 'all', label: 'All Items' },
-    { value: 'burger', label: 'Burgers' },
-    { value: 'side', label: 'Sides' },
-    { value: 'drink', label: 'Drinks' },
+    { value: 'burger', label: 'Hamburguesas' },
+    { value: 'extras', label: 'Extras' },
+    { value: 'drink', label: 'Bebidas' },
+    { value: 'dessert', label: 'Postres' },
   ];
 
   const filteredItems =
@@ -23,7 +24,7 @@ export default function MenuList() {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Loading menu...</p>
+        <p className="mt-4 text-gray-600">Cargando menú...</p>
       </div>
     );
   }

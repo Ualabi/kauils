@@ -326,7 +326,7 @@ products = [
   },
   {
     'id': 'e_asadero',
-    'name': 'Asadero',
+    'name': 'Asadero extra',
     'price': 20,
     'available': True,
     'category': "extras",
