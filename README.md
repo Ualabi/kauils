@@ -1,73 +1,224 @@
-# React + TypeScript + Vite
+# Hamburguesas Kauil
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Point-of-sale and ordering web app for a burger restaurant. Customers can browse the menu and place pickup orders; staff manage table tickets from a separate dashboard.
 
-Currently, two official plugins are available:
+Built with **React + TypeScript + Vite** and **Firebase** (Auth + Firestore).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19, TypeScript, Tailwind CSS |
+| Routing | React Router v7 |
+| Backend / DB | Firebase Firestore |
+| Auth | Firebase Authentication |
+| Build | Vite |
+| DB scripts | Python 3 + `firebase-admin` |
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 1. Environment variables
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Create a `.env` file at the project root:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIREBASE_MEASUREMENT_ID=
+VITE_TAX_RATE=0.08
+
+# Only needed to run the Python seed scripts
+VITE_FIREBASE_SERVICE_ACCOUNT_PATH=path/to/serviceAccount.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install and run
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+### 3. Seed the database
+
+Visit `/seed` in the browser and click:
+- **Seed Menu Items** — writes all products from `menu_products.py` to Firestore
+- **Initialize Tables** — creates 12 table documents
+- **Create Staff Account** — creates `staff@kauils.com` / `staff123`
+
+Alternatively, run the Python script directly (see [Scripts](#scripts)).
+
+---
+
+## Pages & Routes
+
+| Route | Access | Description |
+|-------|--------|-------------|
+| `/` | Public | Landing page — daily specials + full menu |
+| `/signup` | Public | Customer registration |
+| `/login` | Public | Login for customers and staff |
+| `/menu` | Customer | Interactive menu with cart |
+| `/cart` | Customer | Cart review |
+| `/checkout` | Customer | Order placement, returns pickup code |
+| `/orders` | Customer | Order history |
+| `/staff` | Staff | Table overview dashboard |
+| `/staff/table/:n` | Staff | Table ticket management |
+| `/seed` | Public | Database seeding utilities |
+
+---
+
+## Daily Specials (Landing Page)
+
+The landing page shows two cards that change daily:
+
+- **Pan del Día** — bread of the day (images in `src/images/breads/`)
+- **Agua del Día** — water flavor of the day (images in `src/images/waters/`)
+
+To change them, update the two imports at the top of `src/pages/LandingPage.tsx`:
+
+```ts
+import breadImage from '../images/breads/p_hierbas.jpg';
+import waterImage from '../images/waters/s_guayaba.jpg';
+```
+
+Available bread images: `p_arandano`, `p_hierbas`, `p_parmesano`, `p_perejil`
+Available water images: `s_guayaba`, `s_mango`, `s_maracuya`, `s_maracuya_2`, `s_piña`
+
+---
+
+## Firebase Database Structure
+
+The app uses **Cloud Firestore** with the following top-level collections:
+
+### `menuItems`
+
+One document per product. Document ID matches the product code (e.g. `b_sencilla`).
+
+```
+menuItems/{productId}
+  name        string    — "Sencilla"
+  basePrice   number    — 90
+  category    string    — "burger" | "wings" | "dessert" | "drink" | "extras"
+  available   boolean   — true / false
+  description string    — long description (empty string if none)
+  updatedAt   timestamp
+```
+
+Products are defined in `src/scripts/cloudflare/menu_products.py` and pushed to Firestore with `src/scripts/cloudflare/db_update_firebase.py`.
+
+---
+
+### `users`
+
+Created on signup via Firebase Auth + a Firestore write.
+
+```
+users/{uid}
+  uid             string
+  email           string
+  displayName     string
+  role            string    — "customer" | "staff"
+  createdAt       timestamp
+  employeeId?     string    — staff only
+  assignedTables? number[]  — staff only
+```
+
+---
+
+### `orders`
+
+Created when a customer completes checkout. Each order gets a 6-character pickup code.
+
+```
+orders/{orderId}
+  pickupCode    string    — e.g. "A3F9XZ"
+  customerId    string    — Firebase Auth UID
+  customerEmail string
+  status        string    — "pending" | "preparing" | "ready" | "completed" | "cancelled"
+  items         array
+    menuItemId      string
+    menuItemName    string
+    quantity        number
+    basePrice       number
+    customizations? array
+    itemTotal       number
+  subtotal      number
+  tax           number
+  total         number
+  createdAt     timestamp
+  updatedAt     timestamp
+  readyAt?      timestamp
+  completedAt?  timestamp
+```
+
+---
+
+### `tables`
+
+One document per table. Document ID is the table number as a string (`"1"`, `"2"`, …).
+
+```
+tables/{tableNumber}
+  tableNumber       number
+  status            string    — "available" | "occupied" | "reserved"
+  currentTicketId?  string
+  assignedStaffId?  string
+  lastUpdated       timestamp
+```
+
+---
+
+### `tickets`
+
+Created by staff when a dine-in table places an order. Auto-generated Firestore ID.
+
+```
+tickets/{ticketId}
+  tableNumber   number
+  staffId       string    — Firebase Auth UID
+  staffName     string
+  status        string    — "open" | "closed"
+  items         array
+    menuItemId  string
+    name        string
+    price       number
+    quantity    number
+    addedAt?    timestamp
+    addedBy?    string
+  subtotal      number
+  tax           number
+  total         number
+  createdAt     timestamp
+  updatedAt     timestamp
+  closedAt?     timestamp
+```
+
+---
+
+## Scripts
+
+Located in `src/scripts/cloudflare/`.
+
+| File | Purpose |
+|------|---------|
+| `menu_products.py` | Source of truth for all menu items |
+| `db_update_firebase.py` | Upserts all products from `menu_products.py` into Firestore `menuItems` |
+| `db_update_menu.py` | Legacy — writes products to a Cloudflare D1 (SQLite) database |
+| `db_base.py` | Shared Cloudflare D1 connection config |
+
+### Running the Firebase seed script
+
+```bash
+cd src/scripts/cloudflare
+pip install firebase-admin python-dotenv
+python db_update_firebase.py
+```
+
+The script uses `set(..., merge=True)` so it is safe to run multiple times — it updates existing documents without overwriting fields not listed in the script.

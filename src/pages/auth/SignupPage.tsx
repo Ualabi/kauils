@@ -80,21 +80,6 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-field"
-                placeholder="correo@ejemplo.com"
-              />
-            </div>
-
-            <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                 Número de teléfono (whatsapp)
               </label>
@@ -106,6 +91,21 @@ export default function SignupPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 className="input-field"
                 placeholder="1234567890"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Correo electrónico
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
+                placeholder="correo@ejemplo.com"
               />
             </div>
 

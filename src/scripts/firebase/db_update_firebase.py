@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
-from menu_products import products
+from scripts.menu_products import products
 import os
 
 load_dotenv()

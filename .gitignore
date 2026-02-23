@@ -6,7 +6,7 @@ src/scripts/cloudflare/db_keys.py
 src/scripts/cloudflare/.env
 
 # Firebase keys
-src/scripts/cloudflare/kauils_firebase.json
+src/scripts/firebase/firebase.json
 
 # Logs
 logs
