@@ -283,18 +283,19 @@ export function subscribeToExpoTickets(
   return onSnapshot(
     q,
     (snapshot) => {
-      const tickets = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() } as Ticket))
+      const all = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Ticket));
+      const tickets = all
         .filter(t => t.status === 'open')
         .sort((a, b) => {
           const aSeconds = (a.createdAt as Timestamp)?.seconds ?? 0;
           const bSeconds = (b.createdAt as Timestamp)?.seconds ?? 0;
           return aSeconds - bSeconds;
         });
+      console.log(`[Expo] subscribeToExpoTickets: ${all.length} raw, ${tickets.length} open`);
       callback(tickets);
     },
     (error) => {
-      console.error('Error subscribing to expo tickets:', error);
+      console.error('[Expo] subscribeToExpoTickets ERROR (check Firestore rules):', error);
       if (onError) onError(error);
       else callback([]);
     }

@@ -3,6 +3,7 @@ import { useExpoTickets } from '../../hooks/useTickets';
 import { useActiveOrders } from '../../hooks/useOrders';
 import { useTables } from '../../hooks/useTables';
 import type { Ticket, Order, TicketItemStatus } from '../../types';
+import { Timestamp } from 'firebase/firestore';
 import { updateTicketItemStatus, closeTicket } from '../../services/ticket.service';
 import { updateOrderStatus, updateOrderItemStatus } from '../../services/order.service';
 import { updateTableStatus, clearTable } from '../../services/table.service';
@@ -277,8 +278,12 @@ function OrderCard({ order }: { order: Order }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 
+type AllItem =
+  | { kind: 'ticket'; data: Ticket; ts: number }
+  | { kind: 'order';  data: Order;  ts: number };
+
 export default function ExpoPage() {
-  const [tab, setTab] = useState<'orders' | 'tables' | 'togo'>('orders');
+  const [tab, setTab] = useState<'all' | 'orders' | 'tables' | 'togo'>('all');
   const { tickets, loading: ticketsLoading, error: ticketsError } = useExpoTickets();
   const { orders, loading: ordersLoading } = useActiveOrders();
   const { tables } = useTables();
@@ -286,6 +291,12 @@ export default function ExpoPage() {
   const tableTickets = tickets.filter((t) => t.type !== 'togo');
   const togoTickets  = tickets.filter((t) => t.type === 'togo');
   const occupiedTables = tables.filter((t) => t.status === 'occupied');
+
+  const allItems: AllItem[] = [
+    ...tickets.map(t => ({ kind: 'ticket' as const, data: t, ts: (t.createdAt as Timestamp)?.seconds ?? 0 })),
+    ...orders.map(o => ({ kind: 'order'  as const, data: o, ts: (o.createdAt as Timestamp)?.seconds ?? 0 })),
+  ].sort((a, b) => a.ts - b.ts);
+  const allLoading = ticketsLoading || ordersLoading;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -304,7 +315,24 @@ export default function ExpoPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button
+            onClick={() => setTab('all')}
+            className={`px-5 py-2 rounded-lg font-semibold transition-colors ${
+              tab === 'all'
+                ? 'bg-gray-800 text-white'
+                : 'bg-white text-gray-600 border hover:bg-gray-50'
+            }`}
+          >
+            Todo
+            {allItems.length > 0 && (
+              <span className={`ml-2 rounded-full text-xs px-1.5 py-0.5 font-bold ${
+                tab === 'all' ? 'bg-white text-gray-800' : 'bg-gray-800 text-white'
+              }`}>
+                {allItems.length}
+              </span>
+            )}
+          </button>
           <button
             onClick={() => setTab('tables')}
             className={`px-5 py-2 rounded-lg font-semibold transition-colors ${
@@ -351,6 +379,29 @@ export default function ExpoPage() {
             )}
           </button>
         </div>
+
+        {/* ── Todo tab (all types merged, sorted by time) ── */}
+        {tab === 'all' && (
+          <>
+            {allLoading ? (
+              <div className="text-center py-16 text-gray-500">Cargando...</div>
+            ) : allItems.length === 0 ? (
+              <div className="text-center py-16 text-gray-400">
+                No hay pedidos activos en este momento
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {allItems.map((item) =>
+                  item.kind === 'ticket' ? (
+                    <TicketCard key={`t-${item.data.id}`} ticket={item.data} />
+                  ) : (
+                    <OrderCard key={`o-${item.data.id}`} order={item.data} />
+                  )
+                )}
+              </div>
+            )}
+          </>
+        )}
 
         {/* ── Para recoger tab (online customer orders) ── */}
         {tab === 'orders' && (
