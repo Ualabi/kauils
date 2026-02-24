@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { CartContext } from './CartContext'
 import type { CartContextType, CartItem, MenuItem, Customization } from '../types';
 
-// Tax rate from environment variable (default 8%)
-const TAX_RATE = Number(import.meta.env.VITE_TAX_RATE) || 0.08;
 
 // Cart Provider Component
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -65,12 +63,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }, 0);
   };
 
-  const getCartTax = (): number => {
-    return getCartSubtotal() * TAX_RATE;
-  };
-
   const getCartTotal = (): number => {
-    return getCartSubtotal() + getCartTax();
+    return getCartSubtotal();
   };
 
   const getItemCount = (): number => {
@@ -85,7 +79,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     clearCart,
     getCartTotal,
     getCartSubtotal,
-    getCartTax,
     getItemCount,
   };
 

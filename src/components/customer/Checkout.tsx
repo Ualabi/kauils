@@ -8,7 +8,7 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ onOrderCreated }: CheckoutProps) {
-  const { items, getCartSubtotal, getCartTax, getCartTotal, clearCart } = useCart();
+  const { items, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,15 +82,7 @@ export default function Checkout({ onOrderCreated }: CheckoutProps) {
       <div className="card">
         <h3 className="text-xl font-bold text-gray-900 mb-4">Order Total</h3>
         <div className="space-y-2">
-          <div className="flex justify-between text-gray-600">
-            <span>Subtotal</span>
-            <span>${getCartSubtotal().toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between text-gray-600">
-            <span>Tax</span>
-            <span>${getCartTax().toFixed(2)}</span>
-          </div>
-          <div className="border-t border-gray-200 pt-2 mt-2">
+          <div className="border-t border-gray-200 pt-2">
             <div className="flex justify-between text-xl font-bold text-gray-900">
               <span>Total</span>
               <span>${getCartTotal().toFixed(2)}</span>

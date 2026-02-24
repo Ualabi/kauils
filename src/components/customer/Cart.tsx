@@ -3,7 +3,7 @@ import { useCart } from '../../contexts/CartContext';
 import CartItem from './CartItem';
 
 export default function Cart() {
-  const { items, getCartSubtotal, getCartTax, getCartTotal, getItemCount } = useCart();
+  const { items, getCartTotal, getItemCount } = useCart();
 
   if (items.length === 0) {
     return (
@@ -34,15 +34,7 @@ export default function Cart() {
       <div className="card">
         <h3 className="text-xl font-bold text-gray-900 mb-4">Resúmen de orden</h3>
         <div className="space-y-2">
-          <div className="flex justify-between text-gray-600">
-            <span>Subtotal</span>
-            <span>${getCartSubtotal().toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between text-gray-600">
-            <span>Tax</span>
-            <span>${getCartTax().toFixed(2)}</span>
-          </div>
-          <div className="border-t border-gray-200 pt-2 mt-2">
+          <div className="border-t border-gray-200 pt-2">
             <div className="flex justify-between text-xl font-bold text-gray-900">
               <span>Total</span>
               <span>${getCartTotal().toFixed(2)}</span>
