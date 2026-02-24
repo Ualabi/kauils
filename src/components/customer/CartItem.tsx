@@ -50,7 +50,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
             onClick={() => removeItem(menuItem.id)}
             className="text-red-600 hover:text-red-700 text-sm font-medium"
           >
-            Remove
+            Remover
           </button>
         </div>
 

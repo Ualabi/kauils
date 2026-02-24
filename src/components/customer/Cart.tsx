@@ -32,7 +32,7 @@ export default function Cart() {
 
       {/* Order Summary */}
       <div className="card">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-4">Resúmen de orden</h3>
         <div className="space-y-2">
           <div className="flex justify-between text-gray-600">
             <span>Subtotal</span>
@@ -52,13 +52,13 @@ export default function Cart() {
 
         <div className="mt-6 space-y-3">
           <Link to="/checkout" className="btn-primary w-full block text-center">
-            Proceed to Checkout
+            Terminar orden
           </Link>
           <Link
             to="/menu"
             className="btn-secondary w-full block text-center"
           >
-            Continue Shopping
+            Seguir ordenando
           </Link>
         </div>
       </div>

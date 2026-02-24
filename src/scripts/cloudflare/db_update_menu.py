@@ -1,5 +1,5 @@
 from db_base import D1_ENDPOINT, HEADERS
-from menu_products import products
+from scripts.menu_products import products
 import requests
 import json
 

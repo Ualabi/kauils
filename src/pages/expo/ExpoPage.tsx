@@ -8,6 +8,24 @@ import { updateTicketItemStatus, closeTicket } from '../../services/ticket.servi
 import { updateOrderStatus, updateOrderItemStatus } from '../../services/order.service';
 import { updateTableStatus, clearTable } from '../../services/table.service';
 
+// ─── Customer orders section ──────────────────────────────────────────────────
+
+const ORDER_STATUS_LABELS: Record<string, string> = {
+  pending:   'Pendiente',
+  preparing: 'Preparando',
+  ready:     'Listo para recoger',
+  completed: 'Completado',
+  cancelled: 'Cancelado',
+};
+
+const ORDER_STATUS_COLORS: Record<string, string> = {
+  pending:   'bg-yellow-100 text-yellow-800',
+  preparing: 'bg-orange-100 text-orange-800',
+  ready:     'bg-green-100 text-green-800',
+  completed: 'bg-gray-100 text-gray-600',
+  cancelled: 'bg-red-100 text-red-700',
+};
+
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
 const ITEM_STATUSES: { value: TicketItemStatus; label: string; bg: string; text: string }[] = [
@@ -160,24 +178,6 @@ function TicketCard({ ticket }: { ticket: Ticket }) {
   );
 }
 
-// ─── Customer orders section ──────────────────────────────────────────────────
-
-const ORDER_STATUS_LABELS: Record<string, string> = {
-  pending:   'Pendiente',
-  preparing: 'Preparando',
-  ready:     'Listo para recoger',
-  completed: 'Completado',
-  cancelled: 'Cancelado',
-};
-
-const ORDER_STATUS_COLORS: Record<string, string> = {
-  pending:   'bg-yellow-100 text-yellow-800',
-  preparing: 'bg-orange-100 text-orange-800',
-  ready:     'bg-green-100 text-green-800',
-  completed: 'bg-gray-100 text-gray-600',
-  cancelled: 'bg-red-100 text-red-700',
-};
-
 function OrderCard({ order }: { order: Order }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState(false);
@@ -287,6 +287,8 @@ export default function ExpoPage() {
   const { tickets, loading: ticketsLoading, error: ticketsError } = useExpoTickets();
   const { orders, loading: ordersLoading } = useActiveOrders();
   const { tables } = useTables();
+
+  console.log('ExpoPage render', { tickets, orders, tables });
 
   const tableTickets = tickets.filter((t) => t.type !== 'togo');
   const togoTickets  = tickets.filter((t) => t.type === 'togo');
@@ -403,25 +405,6 @@ export default function ExpoPage() {
           </>
         )}
 
-        {/* ── Para recoger tab (online customer orders) ── */}
-        {tab === 'orders' && (
-          <>
-            {ordersLoading ? (
-              <div className="text-center py-16 text-gray-500">Cargando pedidos...</div>
-            ) : orders.length === 0 ? (
-              <div className="text-center py-16 text-gray-400">
-                No hay pedidos activos en este momento
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {orders.map((order) => (
-                  <OrderCard key={order.id} order={order} />
-                ))}
-              </div>
-            )}
-          </>
-        )}
-
         {/* ── Mesas tab ── */}
         {tab === 'tables' && (
           <>
@@ -475,6 +458,25 @@ export default function ExpoPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {togoTickets.map((ticket) => (
                   <TicketCard key={ticket.id} ticket={ticket} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ── Para recoger tab (online customer orders) ── */}
+        {tab === 'orders' && (
+          <>
+            {ordersLoading ? (
+              <div className="text-center py-16 text-gray-500">Cargando pedidos...</div>
+            ) : orders.length === 0 ? (
+              <div className="text-center py-16 text-gray-400">
+                No hay pedidos activos en este momento
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {orders.map((order) => (
+                  <OrderCard key={order.id} order={order} />
                 ))}
               </div>
             )}
