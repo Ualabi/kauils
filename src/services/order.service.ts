@@ -157,7 +157,7 @@ export async function updateOrderStatus(
 }
 
 /**
- * Update the status of a single item inside an order (kitchen use)
+ * Update the status of a single item inside an order (expo use)
  */
 export async function updateOrderItemStatus(
   orderId: string,
@@ -184,7 +184,7 @@ export async function updateOrderItemStatus(
 }
 
 /**
- * Subscribe to all active orders for kitchen (pending, preparing, ready)
+ * Subscribe to all active orders for expo (pending, preparing, ready)
  */
 export function subscribeToActiveOrders(
   callback: (orders: Order[]) => void

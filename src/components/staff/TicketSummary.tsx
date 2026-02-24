@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Ticket } from '../../types';
-import { closeTicket, sendTicketToKitchen } from '../../services/ticket.service';
+import { closeTicket, sendTicketToExpo } from '../../services/ticket.service';
 import { clearTable } from '../../services/table.service';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,21 +12,21 @@ interface TicketSummaryProps {
 export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
   const navigate = useNavigate();
   const [closing, setClosing] = useState(false);
-  const [sendingToKitchen, setSendingToKitchen] = useState(false);
+  const [sendingToExpo, setSendingToExpo] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const alreadySent = ticket.kitchenStatus === 'sent';
+  const alreadySent = ticket.expoStatus === 'sent';
 
-  const handleSendToKitchen = async () => {
-    setSendingToKitchen(true);
+  const handleSendToExpo = async () => {
+    setSendingToExpo(true);
     setError(null);
     try {
-      await sendTicketToKitchen(ticket.id);
+      await sendTicketToExpo(ticket.id);
     } catch (err) {
-      console.error('Error enviando a cocina:', err);
-      setError('No se pudo enviar a cocina');
+      console.error('Error enviando a expo:', err);
+      setError('No se pudo enviar a expo');
     } finally {
-      setSendingToKitchen(false);
+      setSendingToExpo(false);
     }
   };
 
@@ -110,15 +110,15 @@ export function TicketSummary({ ticket, tableNumber }: TicketSummaryProps) {
       {ticket.status === 'open' && ticket.items.length > 0 && (
         <div className="space-y-2">
           <button
-            onClick={handleSendToKitchen}
-            disabled={sendingToKitchen}
+            onClick={handleSendToExpo}
+            disabled={sendingToExpo}
             className={`w-full font-semibold py-2 px-4 rounded transition-colors ${
               alreadySent
                 ? 'bg-orange-100 text-orange-700 border border-orange-300 hover:bg-orange-200'
                 : 'bg-orange-500 text-white hover:bg-orange-600'
             }`}
           >
-            {sendingToKitchen
+            {sendingToExpo
               ? 'Enviando...'
               : alreadySent
               ? 'Actualizar expo'

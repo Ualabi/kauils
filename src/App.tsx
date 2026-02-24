@@ -24,7 +24,7 @@ import TableManagementPage from './pages/staff/TableManagementPage';
 import TogoTicketPage from './pages/staff/TogoTicketPage';
 
 // Expo Pages
-import KitchenPage from './pages/kitchen/KitchenPage';
+import ExpoPage from './pages/expo/ExpoPage';
 
 function App() {
   return (
@@ -56,7 +56,7 @@ function App() {
 
             {/* Expo Protected Routes */}
             <Route element={<ProtectedRoute allowedRoles={['expo']} />}>
-              <Route path="expo" element={<KitchenPage />} />
+              <Route path="expo" element={<ExpoPage />} />
             </Route>
 
             {/* 404 Redirect */}

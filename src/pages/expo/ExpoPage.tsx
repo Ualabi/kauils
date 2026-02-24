@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useKitchenTickets } from '../../hooks/useTickets';
+import { useExpoTickets } from '../../hooks/useTickets';
 import { useActiveOrders } from '../../hooks/useOrders';
 import { useTables } from '../../hooks/useTables';
 import type { Ticket, Order, TicketItemStatus } from '../../types';
@@ -277,9 +277,9 @@ function OrderCard({ order }: { order: Order }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 
-export default function KitchenPage() {
+export default function ExpoPage() {
   const [tab, setTab] = useState<'orders' | 'tables' | 'togo'>('orders');
-  const { tickets, loading: ticketsLoading } = useKitchenTickets();
+  const { tickets, loading: ticketsLoading } = useExpoTickets();
   const { orders, loading: ordersLoading } = useActiveOrders();
   const { tables } = useTables();
 

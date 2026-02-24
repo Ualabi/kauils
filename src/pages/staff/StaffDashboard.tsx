@@ -109,7 +109,7 @@ export default function StaffDashboard() {
                   <div className="text-xs font-medium text-orange-600 mt-1">
                     ${ticket.total.toFixed(2)}
                   </div>
-                  {ticket.kitchenStatus === 'sent' && (
+                  {ticket.expoStatus === 'sent' && (
                     <div className="text-xs text-green-600 font-medium mt-1">
                       ✓ En expo
                     </div>

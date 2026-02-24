@@ -3,7 +3,7 @@ import type { Ticket } from '../types';
 import {
   subscribeToTicket,
   subscribeToTableTickets,
-  subscribeToKitchenTickets,
+  subscribeToExpoTickets,
   subscribeToTogoTickets,
 } from '../services/ticket.service';
 
@@ -84,14 +84,14 @@ export function useTogoTickets() {
 }
 
 /**
- * Hook to subscribe to all kitchen tickets (sent to kitchen, open) with real-time updates
+ * Hook to subscribe to all expo tickets (sent to expo, open) with real-time updates
  */
-export function useKitchenTickets() {
+export function useExpoTickets() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = subscribeToKitchenTickets((updatedTickets) => {
+    const unsubscribe = subscribeToExpoTickets((updatedTickets) => {
       setTickets(updatedTickets);
       setLoading(false);
     });

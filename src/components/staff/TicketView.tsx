@@ -126,7 +126,7 @@ export function TicketView({ ticket }: TicketViewProps) {
                 </div>
               </div>
 
-              {/* Kitchen status badge */}
+              {/* Expo status badge */}
               {currentStatus === 'cooking' && (
                 <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded bg-orange-100 text-orange-700 border border-orange-300 text-xs font-semibold">
                   🍳 Cocinando

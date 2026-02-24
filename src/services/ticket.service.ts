@@ -230,16 +230,16 @@ export async function closeTicket(ticketId: string): Promise<void> {
 }
 
 /**
- * Send a ticket to the kitchen
+ * Send a ticket to the expo
  */
-export async function sendTicketToKitchen(ticketId: string): Promise<void> {
+export async function sendTicketToExpo(ticketId: string): Promise<void> {
   try {
     await updateDoc(doc(db, 'tickets', ticketId), {
-      kitchenStatus: 'sent',
+      expoStatus: 'sent',
       updatedAt: serverTimestamp(),
     });
   } catch (error) {
-    console.error('Error sending ticket to kitchen:', error);
+    console.error('Error sending ticket to expo:', error);
     throw error;
   }
 }
@@ -269,14 +269,14 @@ export async function updateTicketItemStatus(
 }
 
 /**
- * Subscribe to all tickets that have been sent to the kitchen (real-time)
+ * Subscribe to all tickets that have been sent to the expo (real-time)
  */
-export function subscribeToKitchenTickets(
+export function subscribeToExpoTickets(
   callback: (tickets: Ticket[]) => void
 ): () => void {
   const q = query(
     collection(db, 'tickets'),
-    where('kitchenStatus', '==', 'sent')
+    where('expoStatus', '==', 'sent')
   );
 
   return onSnapshot(
@@ -293,7 +293,7 @@ export function subscribeToKitchenTickets(
       callback(tickets);
     },
     (error) => {
-      console.error('Error subscribing to kitchen tickets:', error);
+      console.error('Error subscribing to expo tickets:', error);
       callback([]);
     }
   );

@@ -61,7 +61,7 @@ export function useCustomerOrders(customerId: string | undefined) {
 }
 
 /**
- * Hook to subscribe to all active orders for kitchen (real-time)
+ * Hook to subscribe to all active orders for expo (real-time)
  */
 export function useActiveOrders() {
   const [orders, setOrders] = useState<Order[]>([]);

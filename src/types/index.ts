@@ -86,7 +86,7 @@ export interface Table {
 // Ticket status
 export type TicketStatus = 'open' | 'closed';
 
-// Item-level kitchen status (used by both TicketItem and OrderItem)
+// Item-level expo status (used by both TicketItem and OrderItem)
 export type TicketItemStatus = 'received' | 'cooking' | 'ready' | 'served' | 'canceled';
 
 // Ticket item (similar to order item but with staff tracking)
@@ -113,7 +113,7 @@ export interface Ticket {
   staffId: string;
   staffName: string;
   status: TicketStatus;
-  kitchenStatus?: 'pending' | 'sent';
+  expoStatus?: 'pending' | 'sent';
   items: TicketItem[];
   subtotal: number;
   tax: number;
