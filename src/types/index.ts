@@ -135,7 +135,7 @@ export interface AuthContextType {
   user: User | null;
   userRole: UserRole | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<UserRole>;
   signup: (email: string, phone: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
 }

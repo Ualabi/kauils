@@ -26,6 +26,9 @@ import TogoTicketPage from './pages/staff/TogoTicketPage';
 // Expo Pages
 import ExpoPage from './pages/expo/ExpoPage';
 
+// Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+
 function App() {
   return (
     <AuthProvider>
@@ -40,7 +43,7 @@ function App() {
             <Route path="seed" element={<SeedPage />} />
 
             {/* Customer Protected Routes */}
-            <Route element={<ProtectedRoute allowedRoles={['customer']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['customer', 'admin']} />}>
               <Route path="menu" element={<CustomerHomePage />} />
               <Route path="cart" element={<CartPage />} />
               <Route path="checkout" element={<CheckoutPage />} />
@@ -48,15 +51,20 @@ function App() {
             </Route>
 
             {/* Staff Protected Routes */}
-            <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['staff', 'admin']} />}>
               <Route path="staff" element={<StaffDashboard />} />
               <Route path="staff/table/:tableNumber" element={<TableManagementPage />} />
               <Route path="staff/togo/:ticketId" element={<TogoTicketPage />} />
             </Route>
 
             {/* Expo Protected Routes */}
-            <Route element={<ProtectedRoute allowedRoles={['expo']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['expo', 'admin']} />}>
               <Route path="expo" element={<ExpoPage />} />
+            </Route>
+
+            {/* Admin Protected Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route path="admin" element={<AdminDashboard />} />
             </Route>
 
             {/* 404 Redirect */}

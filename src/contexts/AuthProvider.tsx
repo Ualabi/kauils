@@ -45,9 +45,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string): Promise<void> => {
-    await authService.login(email, password);
+  const login = async (email: string, password: string) => {
+    const role = await authService.login(email, password);
     // User state will be updated by onAuthStateChanged listener
+    return role;
   };
 
   const signup = async (email: string, phone: string, password: string, displayName: string): Promise<void> => {

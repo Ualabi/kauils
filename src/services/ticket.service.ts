@@ -11,6 +11,7 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
+  writeBatch,
   Timestamp,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
@@ -401,6 +402,43 @@ export function subscribeToTicket(
       callback(null);
     }
   );
+}
+
+/**
+ * Get all tickets (admin — sorted newest first)
+ */
+export async function getAllTicketsAdmin(): Promise<Ticket[]> {
+  try {
+    const q = query(collection(db, 'tickets'), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Ticket));
+  } catch (error) {
+    console.error('Error getting all tickets:', error);
+    throw error;
+  }
+}
+
+/**
+ * Delete all tickets created before a given date (admin — batched)
+ */
+export async function deleteTicketsBeforeDate(before: Date): Promise<number> {
+  try {
+    const q = query(
+      collection(db, 'tickets'),
+      where('createdAt', '<', Timestamp.fromDate(before))
+    );
+    const snapshot = await getDocs(q);
+    const docs = snapshot.docs;
+    for (let i = 0; i < docs.length; i += 500) {
+      const batch = writeBatch(db);
+      docs.slice(i, i + 500).forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    }
+    return docs.length;
+  } catch (error) {
+    console.error('Error deleting tickets:', error);
+    throw error;
+  }
 }
 
 /**

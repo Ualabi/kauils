@@ -30,8 +30,9 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   if (!allowedRoles.includes(userRole)) {
     // Redirect to appropriate home page based on role
     const redirectPath =
-      userRole === 'customer' ? '/menu' :
-      userRole === 'expo'  ? '/expo' : '/staff';
+      userRole === 'admin'    ? '/admin' :
+      userRole === 'customer' ? '/menu'  :
+      userRole === 'expo'     ? '/expo'  : '/staff';
     return <Navigate to={redirectPath} replace />;
   }
 

@@ -1,9 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+
+const ROLE_VIEWS = [
+  { label: 'Admin',    path: '/admin' },
+  { label: 'Staff',    path: '/staff' },
+  { label: 'Expo',     path: '/expo'  },
+  { label: 'Cliente',  path: '/menu'  },
+] as const;
 
 export default function Header() {
   const { user, userRole, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -13,6 +21,12 @@ export default function Header() {
       console.error('Error logging out:', error);
     }
   };
+
+  // Determine which view the admin is currently on for the dropdown
+  const currentView = ROLE_VIEWS.find(v => location.pathname.startsWith(v.path))?.path ?? '/admin';
+
+  // When admin has switched to another view, show nav links for that view
+  const activeView = userRole === 'admin' ? currentView : null;
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
@@ -27,13 +41,29 @@ export default function Header() {
               <>
                 <span className="text-sm text-gray-600">
                   {user.displayName}
-                  {userRole != 'customer' && (
+                  {userRole !== 'customer' && (
                     <span className="ml-2 text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
                       {userRole}
                     </span>
                   )}
                 </span>
-                {userRole === 'customer' && (
+
+                {/* Role-switcher dropdown — admin only */}
+                {userRole === 'admin' && (
+                  <select
+                    value={currentView}
+                    onChange={e => navigate(e.target.value)}
+                    className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
+                    title="Cambiar vista"
+                  >
+                    {ROLE_VIEWS.map(v => (
+                      <option key={v.path} value={v.path}>{v.label}</option>
+                    ))}
+                  </select>
+                )}
+
+                {/* Nav links for customer view */}
+                {(userRole === 'customer' || activeView === '/menu') && (
                   <>
                     <Link to="/menu" className="text-gray-700 hover:text-red-600">
                       Ordena
@@ -46,16 +76,25 @@ export default function Header() {
                     </Link>
                   </>
                 )}
-                {userRole === 'staff' && (
+                {/* Nav links for staff view */}
+                {(userRole === 'staff' || activeView === '/staff') && (
                   <Link to="/staff" className="text-gray-700 hover:text-red-600">
                     Panel
                   </Link>
                 )}
-                {userRole === 'expo' && (
+                {/* Nav links for expo view */}
+                {(userRole === 'expo' || activeView === '/expo') && (
                   <Link to="/expo" className="text-gray-700 hover:text-red-600">
                     Expo
                   </Link>
                 )}
+                {/* Nav links for admin view */}
+                {(userRole === 'admin' && activeView === '/admin') && (
+                  <Link to="/admin" className="text-gray-700 hover:text-red-600">
+                    Admin
+                  </Link>
+                )}
+
                 <button
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-700 font-medium"
@@ -68,7 +107,7 @@ export default function Header() {
                 <Link to="/login" className="text-gray-700 hover:text-red-600">
                   Iniciar sesión
                 </Link>
-                <Link 
+                <Link
                   to="/signup"
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
                 >

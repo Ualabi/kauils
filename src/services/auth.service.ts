@@ -44,10 +44,13 @@ export async function signup(
 
 /**
  * Log in with email and password
+ * Returns the user's role so the caller can redirect immediately.
  */
-export async function login(email: string, password: string): Promise<void> {
+export async function login(email: string, password: string): Promise<UserRole> {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const role = await getUserRole(credential.user.uid);
+    return role ?? 'customer';
   } catch (error) {
     console.error('Error logging in:', error);
     throw error;

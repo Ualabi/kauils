@@ -9,6 +9,8 @@ import {
   updateDoc,
   onSnapshot,
   serverTimestamp,
+  writeBatch,
+  orderBy,
   Timestamp,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
@@ -214,19 +216,38 @@ export function subscribeToActiveOrders(
 }
 
 /**
- * Get all orders (staff only)
+ * Get all orders sorted newest first (admin)
  */
 export async function getAllOrders(): Promise<Order[]> {
   try {
-    const ordersRef = collection(db, 'orders');
-    const snapshot = await getDocs(ordersRef);
-
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Order[];
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Order[];
   } catch (error) {
     console.error('Error getting all orders:', error);
+    throw error;
+  }
+}
+
+/**
+ * Delete all orders created before a given date (admin — batched)
+ */
+export async function deleteOrdersBeforeDate(before: Date): Promise<number> {
+  try {
+    const q = query(
+      collection(db, 'orders'),
+      where('createdAt', '<', Timestamp.fromDate(before))
+    );
+    const snapshot = await getDocs(q);
+    const docs = snapshot.docs;
+    for (let i = 0; i < docs.length; i += 500) {
+      const batch = writeBatch(db);
+      docs.slice(i, i + 500).forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    }
+    return docs.length;
+  } catch (error) {
+    console.error('Error deleting orders:', error);
     throw error;
   }
 }

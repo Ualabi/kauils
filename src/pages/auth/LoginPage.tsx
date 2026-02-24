@@ -7,7 +7,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, userRole } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,13 +16,12 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      // After successful login, navigate based on role
-      // The userRole will be updated by AuthContext
-      // We'll navigate after a brief delay to let the role update
-      setTimeout(() => {
-        navigate(userRole === 'staff' ? '/staff' : '/menu');
-      }, 500);
+      const role = await login(email, password);
+      const destination =
+        role === 'admin'    ? '/admin' :
+        role === 'staff'    ? '/staff' :
+        role === 'expo'     ? '/expo'  : '/menu';
+      navigate(destination);
     } catch (err: unknown) {
       console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión. Verifica tus credenciales.');
