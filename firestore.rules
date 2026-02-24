@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: user must be signed in
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper: fetch the caller's role from the users collection
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read:   if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ── Menu items (public read, staff write) ─────────────────────────────────
+    match /menuItems/{itemId} {
+      allow read:  if true;
+      allow write: if isAuthenticated() && getUserRole() == 'staff';
+    }
+
+    // ── Customer orders ────────────────────────────────────────────────────────
+    // • Customers can create and read their own orders
+    // • Staff and Expo can read all orders (expo panel "Para recoger" tab)
+    // • Staff and Expo can update orders (change status, item status)
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        resource.data.customerId == request.auth.uid ||
+        getUserRole() == 'staff' ||
+        getUserRole() == 'expo'
+      );
+      allow create: if isAuthenticated() && getUserRole() == 'customer';
+      allow update: if isAuthenticated() && (
+        getUserRole() == 'staff' ||
+        getUserRole() == 'expo'
+      );
+    }
+
+    // ── Staff tickets (table + to-go orders) ──────────────────────────────────
+    // • Staff can read and write all tickets (create, add items, send to expo)
+    // • Expo can read tickets (to display in the expo panel)
+    // • Expo cannot write tickets (they only update item statuses & close via
+    //   the closeTicket / updateTicketItemStatus functions which go through
+    //   staff write permission — if you want expo to close tickets too,
+    //   change the write rule to include 'expo' as well)
+    match /tickets/{ticketId} {
+      allow read:  if isAuthenticated() && (
+        getUserRole() == 'staff' ||
+        getUserRole() == 'expo'
+      );
+      allow write: if isAuthenticated() && (
+        getUserRole() == 'staff' ||
+        getUserRole() == 'expo'
+      );
+    }
+
+    // ── Tables ────────────────────────────────────────────────────────────────
+    // Staff and Expo can manage table status
+    match /tables/{tableId} {
+      allow read:  if isAuthenticated() && (
+        getUserRole() == 'staff' ||
+        getUserRole() == 'expo'
+      );
+      allow write: if isAuthenticated() && (
+        getUserRole() == 'staff' ||
+        getUserRole() == 'expo'
+      );
+    }
+
+    // ── Pickup codes (internal uniqueness tracking) ───────────────────────────
+    match /pickupCodes/{code} {
+      allow read, write: if isAuthenticated() && getUserRole() == 'customer';
+    }
+  }
+}

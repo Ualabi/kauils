@@ -89,14 +89,23 @@ export function useTogoTickets() {
 export function useExpoTickets() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = subscribeToExpoTickets((updatedTickets) => {
-      setTickets(updatedTickets);
-      setLoading(false);
-    });
+    const unsubscribe = subscribeToExpoTickets(
+      (updatedTickets) => {
+        setTickets(updatedTickets);
+        setLoading(false);
+        setError(null);
+      },
+      (err) => {
+        console.error('useExpoTickets error:', err);
+        setError(err.message ?? 'Error al cargar tickets de expo');
+        setLoading(false);
+      }
+    );
     return () => unsubscribe();
   }, []);
 
-  return { tickets, loading };
+  return { tickets, loading, error };
 }

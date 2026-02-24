@@ -272,7 +272,8 @@ export async function updateTicketItemStatus(
  * Subscribe to all tickets that have been sent to the expo (real-time)
  */
 export function subscribeToExpoTickets(
-  callback: (tickets: Ticket[]) => void
+  callback: (tickets: Ticket[]) => void,
+  onError?: (error: Error) => void
 ): () => void {
   const q = query(
     collection(db, 'tickets'),
@@ -294,7 +295,8 @@ export function subscribeToExpoTickets(
     },
     (error) => {
       console.error('Error subscribing to expo tickets:', error);
-      callback([]);
+      if (onError) onError(error);
+      else callback([]);
     }
   );
 }

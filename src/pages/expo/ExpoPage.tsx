@@ -279,7 +279,7 @@ function OrderCard({ order }: { order: Order }) {
 
 export default function ExpoPage() {
   const [tab, setTab] = useState<'orders' | 'tables' | 'togo'>('orders');
-  const { tickets, loading: ticketsLoading } = useExpoTickets();
+  const { tickets, loading: ticketsLoading, error: ticketsError } = useExpoTickets();
   const { orders, loading: ordersLoading } = useActiveOrders();
   const { tables } = useTables();
 
@@ -295,6 +295,13 @@ export default function ExpoPage() {
           <h1 className="text-3xl font-bold text-gray-900">Panel de Expo</h1>
           <p className="text-gray-500 mt-1">Vista en tiempo real de pedidos y mesas</p>
         </div>
+
+        {/* Error banner (e.g. Firestore permission denied) */}
+        {ticketsError && (
+          <div className="mb-4 bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded">
+            <strong>Error al cargar tickets:</strong> {ticketsError}
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-2 mb-6">
@@ -387,7 +394,7 @@ export default function ExpoPage() {
               <div className="text-center py-16 text-gray-500">Cargando tickets...</div>
             ) : tableTickets.length === 0 ? (
               <div className="text-center py-16 text-gray-400">
-                No hay tickets de mesa enviados a cocina
+                No hay tickets de mesa enviados a expo
                 {occupiedTables.length > 0 && (
                   <p className="text-sm mt-2">
                     ({occupiedTables.length} mesa(s) ocupada(s) — el mesero aún no ha enviado el pedido)
